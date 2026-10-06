@@ -1,37 +1,32 @@
 # StudyPlan - Asistensi 1 (Quiz 2 PBP: Django Auth + JavaScript)
 
 > FILE INI = STATE BELAJAR. Dibaca oleh AI mana pun yang user pakai (AI tidak punya memory antar sesi).
-> Raw link (AI: fetch ini, bukan halaman github.com biasa):
-> https://raw.githubusercontent.com/zidan-do-pbp/Asistensi-Kuis-PBP/latihan/Asistensi-1/StudyPlan.md
-> Progress log (append-only, dibaca bersama file ini): https://raw.githubusercontent.com/zidan-do-pbp/Asistensi-Kuis-PBP/latihan/Asistensi-1/ProgressLog.md
-> Index TODO (cari TODO di sini, jangan scan repo): https://raw.githubusercontent.com/zidan-do-pbp/Asistensi-Kuis-PBP/main/Asistensi-1/TODO-INDEX.md
+> Raw link (AI: fetch ini, bukan halaman github.com biasa): <https://raw.githubusercontent.com/zidan-do-pbp/Asistensi-Kuis-PBP/main/Asistensi-1/StudyPlan.md>
 
 ---
 
 ## 0. AI PROTOCOL (WAJIB BACA PERTAMA)
 
-1. Baca file ini sampai habis SEBELUM menjawab apa pun, lalu fetch ProgressLog.md (link di header; 404 = belum ada log, lanjut). Kalau ProgressLog punya entri SETELAH baris `HANDOFF-MERGED` terakhir, entri itu lebih baru dari Section 2 dan 3: percaya log. Lalu balas maksimal 3 baris: (a) posisi terakhir belajar, (b) Next Action, (c) tanya user siap lanjut atau mau ubah fokus.
+1. Baca file ini sampai habis SEBELUM menjawab apa pun. Lalu balas maksimal 3 baris: (a) posisi terakhir belajar, (b) Next Action di Section 2, (c) tanya user siap lanjut atau mau ubah fokus.
 2. Materi sumber = file notes transkrip (Section 1). Ikuti aturan LEGEND di file itu:
-   - Percaya tag [EXT]. Tag [INF] dan [AMB] = belum terverifikasi, cek repo/slide user sebelum dijadikan kode.
-   - Info tidak ada di notes -> bilang "not in notes". Jangan karang dari memori.
-   - Teks spec kuis/tugas dari user mengalahkan notes.
+  - Percaya tag [EXT]. Tag [INF] dan [AMB] = belum terverifikasi, cek repo/slide user sebelum dijadikan kode.
+  - Info tidak ada di notes -> bilang "not in notes". Jangan karang dari memori.
+  - Teks spec kuis/tugas dari user mengalahkan notes.
 3. Kalau AI tidak bisa buka link: minta user paste isi StudyPlan.md dan notes. Jangan pura-pura sudah baca.
-4. Gaya mengajar dan format output: IKUTI Section 0B (style caveman-lite + format Open/Read/Explain/Before-After/Run/Push/Log + loop GUIDED-ATTEMPT). Section 0B wajib.
+4. Gaya mengajar dan format output: IKUTI Section 0B (style caveman-lite + format Open/Read/Explain/Before-After/Run/Push + loop GUIDED-ATTEMPT). Section 0B wajib.
 5. Prioritas: kerjakan P1 dulu (yang dikonfirmasi dosen), lalu P2, lalu P3.
 6. Aturan mengubah status (JANGAN longgar):
-   - `[ ]` belum / `[~]` sedang / `[x]` lulus.
-   - Paham = `[x]` hanya jika user menjelaskan ALASAN (bukan sekadar apa) dengan kata sendiri DAN menjawab 2 pertanyaan recall benar tanpa hint.
-   - Latihan = `[x]` hanya jika user menulis kodenya dari kosong (tanpa melihat jawaban) dan user mem-paste kode ke chat untuk direview AI. Kesalahan sintaks kecil boleh.
-   - "Saya sudah paham" dari user saja BUKAN bukti. Pakai `[~]`.
-   - Setiap perubahan status wajib ada bukti 1 kalimat di kolom Catatan atau Session Log.
+  - `[ ]` belum / `[~]` sedang / `[x]` lulus.
+  - Paham = `[x]` hanya jika user menjelaskan ALASAN (bukan sekadar apa) dengan kata sendiri DAN menjawab 2 pertanyaan recall benar tanpa hint.
+  - Latihan = `[x]` hanya jika user menulis kodenya dari kosong (tanpa melihat jawaban) dan user mem-paste kode ke chat untuk direview AI. Kesalahan sintaks kecil boleh.
+  - "Saya sudah paham" dari user saja BUKAN bukti. Pakai `[~]`.
+  - Setiap perubahan status wajib ada bukti 1 kalimat di kolom Catatan atau Session Log.
 7. AI tidak bisa push ke GitHub dan tidak bisa melihat repo/laptop user kecuali user paste. Jangan klaim sudah memverifikasi.
 8. Log (Section 6 dan 7) bersifat append-only. Jangan hapus entri lama.
-9. HANDOFF (merge berkala, bukan satu-satunya penyimpanan): saat user bilang "handoff", "simpan", "limit", "ganti AI", atau setelah selesai sekitar 3-5 item, atau kalau percakapan sudah panjang, AI proaktif mengingatkan lalu mengeluarkan:
-   (a) FULL isi StudyPlan.md terbaru dalam SATU code block (Section 2, 3, 6, 7 diupdate dari ProgressLog; Section 0, 0B, 1, 4, 5, 8 tidak diubah), dan
-   (b) perintah PowerShell dari Section 8 yang sudah terisi (termasuk baris `HANDOFF-MERGED` ke ProgressLog).
+9. HANDOFF: saat user bilang "handoff", "simpan", "limit", "ganti AI", atau setelah selesai sekitar 3-5 item, atau kalau percakapan sudah panjang, AI proaktif mengingatkan lalu mengeluarkan:
+(a) FULL isi StudyPlan.md terbaru dalam SATU code block (Section 2, 3, 6, 7 terupdate; Section 0, 0B, 1, 4, 5, 8 tidak diubah), dan
+(b) perintah PowerShell dari Section 8 yang sudah terisi.
 10. Jangan ubah struktur/heading file ini supaya AI lain tetap bisa parse.
-11. READ SCOPE (hemat token, WAJIB): ikuti 0B "Read scope". Jangan fetch zip, folder, atau seluruh repo. Cari TODO di TODO-INDEX.md, fetch HANYA file yang berisi TODO yang diminta user.
-12. COMMIT LOG (WAJIB): SETIAP balasan AI diakhiri blok F6 (0B). Tujuan: kalau AI kena limit mendadak, progress sudah ada di GitHub. Tidak ada balasan tanpa F6, termasuk balasan penjelasan saja.
 
 ---
 
@@ -46,7 +41,7 @@ Zydan = Fasilkom UI student. Cannot validate Django/JS code alone. Often forgets
 2. Caveman-lite: no greeting, no praise, no closing recap. Fragments ok. `->` for flow/cause. Code, commands, paths, identifiers stay exact.
 3. No em-dash. Use period, comma, colon, parentheses.
 4. Start with the answer. End with delta: what changed, what is still open, what starts next.
-5. Every factual claim needs a source: notes node id, Zydan's repo file, or official docs actually opened. Unknown -> say "not in notes" or "belum tahu, cek: <how>". Never invent APIs, numbers, or file contents.
+5. Every factual claim needs a source: notes node id, Zydan's repo file, or official docs actually opened. Unknown -> say "not in notes" or "belum tahu, cek: ". Never invent APIs, numbers, or file contents.
 6. Do not ask Zydan to approve technical choices. Decide, state the assumption in one line, go. Ask only about intent.
 7. One question per turn, max 30 words.
 8. Zydan correct -> say correct + one reinforcing detail. Wrong -> say wrong, supportive tone, point to node id. No cheerleading.
@@ -70,6 +65,7 @@ Per TODO, loop in this order. One step per turn. Wait for Zydan's "ok"/output be
 10. Update checklist status in-session using Section 0 rule 6. Then next TODO.
 
 Hint ladder when Zydan says "hint", "stuck", "kasih":
+
 - H1: concept pointer + node id only.
 - H2: skeleton with blanks.
 - H3: full After. After H3, Latihan for that item stays `[~]` at most.
@@ -80,107 +76,74 @@ Zydan can say "mode cepat" to skip the attempt step (AI shows After directly). L
 
 F1 OPEN. At the start of every step that touches a file:
 
-| | |
-|---|---|
-| Open | `views.py` |
+|      |                   |
+| ---- | ----------------- |
+| Open | `views.py`        |
 | Path | `./main/views.py` |
 
 F2 READ. When Zydan asks to read a TODO:
 
-| | |
-|---|---|
-| Read | `// TODO: <exact text from the file>` |
+|         |                                                         |
+| ------- | ------------------------------------------------------- |
+| Read    | `// TODO: <exact text from the file>`                   |
 | Explain | <1-3 short lines: what it asks, which concept, node id> |
 
 F3 CHANGE. When modifying a file. One-line code goes inside the cell. Multi-line code: keep the Before/After rows as labels and put the code in fenced blocks right under each label. Show only the changed region plus 1-2 context lines, anchored by function name.
 
-| | |
-|---|---|
+|        |          |
+| ------ | -------- |
 | Before | `<code>` |
-| After | `<code>` |
+| After  | `<code>` |
 
 F4 RUN. When Zydan must run something. Always state the directory, because Zydan forgets. Never assume the venv is active, say when it is needed.
 
 `PS: <current directory>`
-```powershell
+
+```
 <command>
 ```
+
 Why: <one line, what this command does>
 Expect: <one line, what success looks like + the most common error and its meaning>
 
 F5 PUSH. After a verified step. List exact files, no blind `git add .`. Commit message starts with the checklist id.
 
-```powershell
+```
 git status --short
 git add <file1> <file2>
 git commit -m "<ID>: <what changed>"
 git push origin HEAD
 ```
 
-Kalau step terverifikasi DAN ada file kode, jangan kirim F5 terpisah: tambahkan file itu ke `git add` di F6 (satu commit).
-
-F6 LOG. WAJIB di akhir SETIAP balasan. Satu baris log + commit + push. Jalankan dari folder `Asistensi-1`, branch `latihan` (cek: `git branch --show-current`). Isi `<...>` oleh AI. Teks log tidak boleh mengandung `"`, `$`, atau backtick.
-
-`PS: ...\asistensi-kuis-pbp\Asistensi-1`
-```powershell
-$l = "$(Get-Date -Format 'yyyy-MM-dd HH:mm') | <AI> | <ID> | <event> | next: <next>"
-[IO.File]::AppendAllText("$PWD\ProgressLog.md", "$l`n", [Text.UTF8Encoding]::new($false))
-git add ProgressLog.md <file kode terverifikasi, kalau ada>
-git commit -m "log: <ID> <event>"
-git push origin HEAD
-```
-Why: simpan posisi belajar ke GitHub tiap balasan. Contoh nyata di Section 7B.
-Expect: baris `[latihan xxxxxxx] log: ...` lalu `branch 'latihan' -> ...`. Kalau push ditolak: `git pull --rebase origin latihan` lalu ulangi `git push origin HEAD`.
-
-Nilai `<event>` (pilih satu): `READ`, `EXPLAIN`, `ATTEMPT`, `REVIEW`, `H1`, `H2`, `H3`, `RUN-OK`, `RUN-FAIL`, `PASS-paham`, `PASS-latihan`, `WEAK:<konsep>`, `HANDOFF-MERGED`. Perubahan status checklist (Section 0 rule 6) WAJIB tercatat di sini dengan bukti 1 kalimat di `<next>` atau event.
-
 ### Session start (once per new AI session)
 
-1. Do Section 0 rule 1 (3-line summary), termasuk fetch ProgressLog.md.
-2. Fetch TODO-INDEX.md (link di header). Jangan minta user paste `git ls-files`, jangan fetch zip atau folder.
-3. Kalau TODO-INDEX.md perlu dibuat ulang, user jalankan dari `Asistensi-1`:
+1. Do Section 0 rule 1 (3-line summary).
+2. Ask Zydan to paste the output of this, so paths are never guessed:
 
-`PS: ...\asistensi-kuis-pbp\Asistensi-1`
-```powershell
-Get-ChildItem -Recurse -File -Include *.py,*.html,*.js | Where-Object { $_.FullName -notmatch '\\(venv|env|\.venv|__pycache__)\\' } | Select-String -Pattern 'TODO|BONUS'
+`PS: <repo folder>`
+
+```
+git ls-files
 ```
 
-### Read scope (hemat token, WAJIB)
+3. To find all TODOs:
 
-Why: AI kena limit kalau membaca terlalu banyak. Baca sekecil mungkin.
-
-1. Sumber state hanya 3 file kecil: StudyPlan.md, ProgressLog.md, TODO-INDEX.md.
-2. User minta "TODO 3 soal2" -> cari baris di TODO-INDEX.md -> fetch raw HANYA file itu (branch `latihan`):
-   `https://raw.githubusercontent.com/zidan-do-pbp/Asistensi-Kuis-PBP/latihan/Asistensi-1/<path dari index>`
-3. Jangan fetch file lain, folder lain, atau soal lain. Jangan baca file yang tidak mengandung TODO yang diminta.
-4. Notes (Section 1) hanya di-fetch saat butuh penjelasan node tertentu, sekali per sesi.
-5. Jawaban/solusi ada di branch `solution`. Fetch HANYA kalau user minta H3 atau review, dan HANYA file yang sama:
-   `https://raw.githubusercontent.com/zidan-do-pbp/Asistensi-Kuis-PBP/solution/Asistensi-1/<path>`
-   Jangan preload, jangan tampilkan sebelum user mencoba (aturan GUIDED-ATTEMPT).
-6. Link tidak bisa dibuka -> minta user paste potongan file TODO itu saja. Jangan pura-pura sudah baca.
-
-### Branch layout
-
-| Branch | Isi | Dipakai untuk |
-| ------ | --- | ------------- |
-| `main` | template bersih (TODO saja) + StudyPlan | sumber reset, jangan dikerjakan langsung |
-| `latihan` | kerja user + ProgressLog.md + StudyPlan terupdate | semua latihan dan log F6 |
-| `solution` | jawaban lengkap | rujukan H3 dan review |
-
-Reset satu soal ke template: `git checkout main -- soal2` (dari `Asistensi-1`, di branch `latihan`).
+```
+Select-String -Path (git ls-files '*.py','*.html','*.js') -Pattern 'TODO'
+```
 
 ### Run cheatsheet (standard Python/Django commands, verify against the repo README/requirements)
 
 Run `manage.py` commands from the folder that contains `manage.py`. Check: `Test-Path .\manage.py`.
 
 | Need | Command | Note |
-|------|---------|------|
+| --- | --- | --- |
 | create venv | `python -m venv <venv>` | once per clone |
 | activate venv | `.\<venv>\Scripts\Activate.ps1` | prompt shows `(<venv>)`. If blocked: `Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass` first |
 | install deps | `pip install -r requirements.txt` | venv must be active. Lab bottleneck, see notes `tip:quiz_env` |
 | apply DB schema | `python manage.py migrate` | run after clone or after new migration files |
 | make migration | `python manage.py makemigrations` | only after editing models.py |
-| run server | `python manage.py runserver` | open http://127.0.0.1:8000/ , stop with Ctrl+C |
+| run server | `python manage.py runserver` | open <http://127.0.0.1:8000/> , stop with Ctrl+C |
 | Django shell | `python manage.py shell` | leave with `exit()`. Used for creating users/groups, see A2.0 |
 | run tests | `python manage.py test` | only if the task has tests |
 
@@ -188,9 +151,9 @@ Run `manage.py` commands from the folder that contains `manage.py`. Check: `Test
 
 ## 1. SUMBER & KONTEKS
 
-- Repo: https://github.com/zidan-do-pbp/Asistensi-Kuis-PBP (folder `Asistensi-1`)
+- Repo: <https://github.com/zidan-do-pbp/Asistensi-Kuis-PBP> (folder `Asistensi-1`)
 - Notes transkrip asistensi (knowledge map, tag [EXT]/[INF]/[AMB], node id, edges):
-  https://raw.githubusercontent.com/zidan-do-pbp/Asistensi-Kuis-PBP/main/Asistensi-1/notes-asistensi-django-auth-js.md
+<https://raw.githubusercontent.com/zidan-do-pbp/Asistensi-Kuis-PBP/main/Asistensi-1/notes-asistensi-django-auth-js.md>
 - Rekaman: 2026-10-04, topik Django auth/authz + JS interaktif. Persiapan Quiz 2 (Tutorial 4 + 5).
 - Tiga topik kuis yang dikonfirmasi dosen (via TA, notes `rule:quiz2_topics`):
   1. JavaScript.
@@ -199,19 +162,18 @@ Run `manage.py` commands from the folder that contains `manage.py`. Check: `Test
 - Unit testing: tidak disebut dosen. Selenium: kemungkinan tidak keluar.
 - Tanggal kuis: [ISI USER: belum diketahui pasti, notes menandai [AMB]]
 - Task: A1-A4 = tugas Django. B1-B4 = tugas JS.
-- Soal latihan di repo (folder `soal1`, `soal2`, `soal3`, tema model/MVT/test Book): checklist S1-S3 di Section 3. Lokasi tepatnya ada di TODO-INDEX.md.
 
 ---
 
 ## 2. STATE SAAT INI (AI: update tiap handoff)
 
-- Terakhir diupdate: 2026-10-06 oleh Claude (tambah READ SCOPE, F6 commit log, branch latihan/solution, checklist S1-S3)
+- Terakhir diupdate: 2026-10-07 oleh Claude (orientasi repo, belum ada item belajar disentuh)
 - Total sesi belajar: 0
-- Progres Paham: 0/46 | Progres Latihan: 0/37
-- Fokus sekarang: belum mulai
-- NEXT ACTION: (setelah repo bersih + branch `latihan` siap) Mulai P1 dari A4.1 (login_required, paling cepat dan sering keluar), lanjut A2.0, lalu A1.1 dan A1.2.
+- Progres Paham: 0/32 | Progres Latihan: 0/23 (dihitung ulang dari tabel Section 3, sebelumnya tertulis 29)
+- Fokus sekarang: orientasi repo. Isi repo (soal1-3) tidak cocok dengan checklist A/B.
+- NEXT ACTION: Tunggu jawaban user: soal1-3 itu latihan untuk kuis yang mana, dan kode A1-B4 ada di repo/folder mana. Setelah peta jelas, mulai P1 dari A4.1 (kalau kode auth/JS ada) atau ikuti spec user.
 - Jalur belajar P1 yang disarankan: A4.1 -> A2.0 -> A1.1 -> A1.2 -> A2.2 -> A2.3 -> A2.4 -> A2.6 -> B1.1 -> B1.2 -> B2.1 -> B2.4 -> B2.5 -> B3.1 -> B3.2 -> B4.1 -> B4.2 -> B4.3
-- Catatan kondisi user (AI isi kalau relevan): -
+- Catatan kondisi user (AI isi kalau relevan): ATURAN USER: setiap jawaban AI WAJIB ditutup command simpan progress (handoff PowerShell), karena session bisa habis kapan saja. Isi repo lokal (git ls-files + TODO-INDEX.md): soal1 (models Book), soal2 (MVT urls/views/template), soal3 (unit test). Tidak ada kode auth/CSRF/login_required/JS di repo ini. Lokasi kode A1-B4: not in notes.
 
 ---
 
@@ -222,7 +184,7 @@ Kolom: P = prioritas (P1 dikonfirmasi dosen/inti, P2 penting, P3 bonus). Node = 
 ### Django (A1-A4)
 
 | ID | P | Topik (node id) | Paham | Latihan | Tgl | Catatan |
-|----|---|-----------------|-------|---------|-----|---------|
+| --- | --- | --- | --- | --- | --- | --- |
 | A1.1 | P1 | register: UserCreationForm, save, redirect login (`fn:register`) | [ ] | [ ] | - | |
 | A1.2 | P1 | login: AuthenticationForm, login(), set_cookie (`fn:login_user`) | [ ] | [ ] | - | |
 | A1.3 | P2 | logout: POST only 405, logout(), delete_cookie (`fn:logout_user`) | [ ] | [ ] | - | |
@@ -241,7 +203,7 @@ Kolom: P = prioritas (P1 dikonfirmasi dosen/inti, P2 penting, P3 bonus). Node = 
 ### JavaScript (B1-B4)
 
 | ID | P | Topik (node id) | Paham | Latihan | Tgl | Catatan |
-|----|---|-----------------|-------|---------|-----|---------|
+| --- | --- | --- | --- | --- | --- | --- |
 | B1.1 | P1 | renderReports: clear innerHTML, createElement, badge, append (`fn:renderReports`) | [ ] | [ ] | - | |
 | B1.2 | P1 | textContent vs innerHTML (XSS) (`why:textContent_not_innerHTML`) | [ ] | - | - | |
 | B1.3 | P3 | bonus: ringkasan hitung hilang/ditemukan + empty message | [ ] | [ ] | - | |
@@ -258,29 +220,10 @@ Kolom: P = prioritas (P1 dikonfirmasi dosen/inti, P2 penting, P3 bonus). Node = 
 | B4.3 | P1 | urutan isSubmitting=false SEBELUM closeModal (`trap:close_modal_order`) | [ ] | [ ] | - | |
 | B4.4 | P2 | let vs const (`concept:let_vs_const`) | [ ] | - | - | |
 
-### Soal latihan repo (S1-S3, lokasi file: lihat TODO-INDEX.md)
-
-| ID   | P  | Topik (file, TODO)                                                  | Paham | Latihan | Tgl | Catatan |
-| ---- | --- | ------------------------------------------------------------------ | ----- | ------- | --- | ------- |
-| S1.1 | P1 | soal1 models.py TODO 1: field title, author, stock                  | [ ]   | [ ]     | -   |         |
-| S1.2 | P1 | soal1 models.py TODO 2: `__str__` kembalikan judul                  | [ ]   | [ ]     | -   |         |
-| S1.3 | P1 | soal1 models.py TODO 3: `is_available` (stock > 0)                  | [ ]   | [ ]     | -   |         |
-| S1.4 | P3 | soal1 models.py BONUS: `is_low_stock` (1 sampai 3)                  | [ ]   | [ ]     | -   |         |
-| S2.1 | P1 | soal2 quiz_mvt/urls.py TODO 1: include main.urls                    | [ ]   | [ ]     | -   |         |
-| S2.2 | P1 | soal2 main/views.py TODO 2: ambil Book, kirim key "books"           | [ ]   | [ ]     | -   |         |
-| S2.3 | P1 | soal2 main/urls.py TODO 3: path "books/" nama "book_list"           | [ ]   | [ ]     | -   |         |
-| S2.4 | P1 | soal2 templates book_list.html TODO 4: loop, Tersedia/Stok habis/empty | [ ]   | [ ]     | -   |         |
-| S3.1 | P1 | soal3 main/tests.py TODO 1: setUp buat Book                         | [ ]   | [ ]     | -   |         |
-| S3.2 | P1 | soal3 main/tests.py TODO 2: test is_available                       | [ ]   | [ ]     | -   |         |
-| S3.3 | P1 | soal3 main/tests.py TODO 3: test status 200 + template              | [ ]   | [ ]     | -   |         |
-| S3.4 | P1 | soal3 main/tests.py TODO 4: test judul, penulis, Tersedia di response | [ ]   | [ ]     | -   |         |
-| S3.5 | P1 | soal3 main/tests.py TODO 5: test daftar kosong                      | [ ]   | [ ]     | -   |         |
-| S3.6 | P3 | soal3 main/tests.py BONUS: hapus @skip, test stok 0                 | [ ]   | [ ]     | -   |         |
-
 ### Logistik kuis
 
 | ID | P | Topik (node id) | Paham | Latihan | Tgl | Catatan |
-|----|---|-----------------|-------|---------|-----|---------|
+| --- | --- | --- | --- | --- | --- | --- |
 | Q.1 | P2 | cek setup lab 1-2 hari sebelum (jaringan, venv, dependency) (`tip:quiz_env`) | [ ] | - | - | |
 | Q.2 | P2 | lab jaringan terbatas: hapus link eksternal (favicon/font) yang bikin error (`tip:lab_restricted_network`) | [ ] | - | - | |
 | Q.3 | P3 | tahu unit testing dan Selenium itu apa (kemungkinan tidak keluar) | [ ] | - | - | |
@@ -320,8 +263,8 @@ Kolom: P = prioritas (P1 dikonfirmasi dosen/inti, P2 penting, P3 bonus). Node = 
 ## 6. KELEMAHAN / MISKONSEPSI (append-only)
 
 | Tgl | Item | Kesalahan atau miskonsepsi user | Status (open/fixed) |
-|-----|------|----------------------------------|---------------------|
-| - | - | (belum ada) | - |
+| --- | ---- | ------------------------------- | ------------------- |
+| -   | -    | (belum ada)                     | -                   |
 
 ---
 
@@ -331,37 +274,28 @@ Format: `YYYY-MM-DD | AI (nama/model) | aktivitas | item disentuh + perubahan st
 
 - 2026-10-06 | Claude | setup file dari notes transkrip | tidak ada | mulai A4.1
 - 2026-10-06 | Claude | tambah Section 0B (style + format output + cheatsheet run) | tidak ada | mulai A4.1
-- 2026-10-06 | Claude | tambah Read scope, F6 commit log, ProgressLog.md, branch layout, checklist S1-S3; koreksi hitungan Latihan 29 -> 23 (+14 baris S = 37) | tidak ada | bersihkan repo, buat branch latihan, mulai A4.1
-
-### 7B. ProgressLog.md (file terpisah, append-only, ditulis lewat F6)
-
-Format baris: `YYYY-MM-DD HH:mm | AI | ID | event | next: ...`
-
-Contoh:
-
-    2026-10-06 14:05 | Claude | S1.1 | READ | next: user coba tulis field title, author, stock
-    2026-10-06 14:20 | Claude | S1.1 | REVIEW | next: stock harus PositiveIntegerField default 0, user salah di default
-    2026-10-06 14:31 | Claude | S1.1 | PASS-latihan | next: S1.2 (tulis dari kosong, tanpa hint)
+- 2026-10-07 | Claude | orientasi repo: baca git ls-files + TODO-INDEX.md. Repo = soal1 (models Book), soal2 (MVT), soal3 (unit test). Tidak ada kode auth/CSRF/login_required/JS, jadi A1-B4 tidak cocok dengan repo. Claude sempat salah asumsi lokasi kode = "tutorial", dikoreksi user. Hitung ulang Latihan 29 -> 23. User minta tiap jawaban AI ditutup command simpan | tidak ada | tentukan peta soal1-3 vs A/B
 
 ---
 
 ## 8. CARA SIMPAN PROGRESS KE GITHUB (HANDOFF)
 
-AI mengeluarkan full isi file terbaru, user menjalankan di `...\asistensi-kuis-pbp\Asistensi-1`, branch `latihan` (isi `<<...>>` oleh AI). Pola here-string: penutup harus ada di awal baris tanpa spasi.
+AI mengeluarkan full isi file terbaru, user menjalankan di `...\asistensi-kuis-pbp\Asistensi-1` (isi `<<...>>` oleh AI). Pola here-string: penutup harus ada di awal baris tanpa spasi.
 
-    $ErrorActionPreference = 'Stop'
-    $f = Join-Path (Get-Location).Path 'StudyPlan.md'
-    $c = @'
-    <<FULL ISI StudyPlan.md TERBARU DI SINI>>
-    '@
-    [System.IO.File]::WriteAllText($f, $c, [System.Text.UTF8Encoding]::new($false))
-    [System.IO.File]::AppendAllText((Join-Path $PWD.Path 'ProgressLog.md'), ("$(Get-Date -Format 'yyyy-MM-dd HH:mm') | <<AI>> | - | HANDOFF-MERGED | next: <<next>>`n"), [System.Text.UTF8Encoding]::new($false))
-    git pull --rebase --autostash origin latihan
-    git add StudyPlan.md ProgressLog.md
-    git commit -m "progress: <<ringkasan singkat, contoh: A4.1 paham, A2.0 sedang>>"
-    git push origin HEAD
+```
+$ErrorActionPreference = 'Stop'
+$f = Join-Path (Get-Location).Path 'StudyPlan.md'
+$c = @'
+<<FULL ISI StudyPlan.md TERBARU DI SINI>>
+  '@
+[System.IO.File]::WriteAllText($f, $c, [System.Text.UTF8Encoding]::new($false))
+git pull --rebase origin main
+git add StudyPlan.md
+git commit -m "progress: <<ringkasan singkat, contoh: A4.1 paham, A2.0 sedang>>"
+git push origin HEAD
+```
 
 (Catatan: di atas, baris `@'` dan `'@` harus ditulis tanpa indentasi saat dijalankan.)
 
 Prompt untuk AI baru (user tinggal paste):
-"Baca https://raw.githubusercontent.com/zidan-do-pbp/Asistensi-Kuis-PBP/latihan/Asistensi-1/StudyPlan.md lalu ikuti AI PROTOCOL di dalamnya. Baca juga https://raw.githubusercontent.com/zidan-do-pbp/Asistensi-Kuis-PBP/latihan/Asistensi-1/ProgressLog.md dan https://raw.githubusercontent.com/zidan-do-pbp/Asistensi-Kuis-PBP/main/Asistensi-1/TODO-INDEX.md. Jangan baca file lain kecuali TODO yang saya minta. Lanjutkan dari entri log terakhir. Akhiri setiap balasan dengan blok F6."
+"Baca <https://raw.githubusercontent.com/zidan-do-pbp/Asistensi-Kuis-PBP/main/Asistensi-1/StudyPlan.md> lalu ikuti AI PROTOCOL di dalamnya. Notes sumber ada di link Section 1. Lanjutkan dari NEXT ACTION."
