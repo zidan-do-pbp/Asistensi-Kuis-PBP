@@ -8,3 +8,4 @@
 2026-10-07 06:10 | Claude | A2.0 | EXPLAIN | next: user tanya kenapa pakai shell, dijawab dari notes (tip:lab_prep_a2 dan A4 lab shortcut), user lanjut import Group lalu buat Group Owner
 2026-10-07 06:11 | Claude | A2.0 | EXPLAIN | next: user minta urutan dari awal (env ke shell), dikasih 5 langkah, lalu lanjut import Group dan buat Group Owner
 2026-10-07 06:13 | Claude | A2.0 | EXPLAIN | next: env ada di Asistensi-1\quiz2-latihan\env (koreksi user), urutan dipendekkan, user lanjut import Group dan buat Group Owner di shell
+2026-10-07 06:15 | Claude | A2.0 | EXPLAIN | next: setup sudah beres (env aktif, di quiz2-latihan, manage.py True), jangan ulang setup, user buka shell dan buat Group Owner
