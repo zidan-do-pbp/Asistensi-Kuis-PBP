@@ -17,3 +17,4 @@
 2026-10-07 03:51 | Claude | A1.1 | ATTEMPT | next: turunin granularitas, user coba tulis 1 baris if cek method POST dulu
 2026-10-07 03:52 | Claude | A1.1 | H1 | next: koreksi form.GET/POST salah, jelasin request.method dan 2 import satu-satu, tanya recall GET pertama buka halaman
 2026-10-07 03:53 | Claude | A1.1 | H1 | next: koreksi form.GET/POST salah, jelasin request.method dan 2 import satu-satu, tanya recall GET pertama buka halaman
+2026-10-07 03:54 | Claude | A1.1 | ATTEMPT | next: user paste isi default views.py, belum jawab recall GET vs POST pertama buka halaman
