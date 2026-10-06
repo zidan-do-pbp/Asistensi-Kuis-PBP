@@ -55,3 +55,8 @@
 2026-10-07 05:11 | Claude | A1.3 | PASS-latihan | next: Latihan A1.3 lulus (ditulis dari kosong, 1 bug logic dikoreksi sendiri), tanya alasan kenapa logout butuh POST only untuk syarat Paham
 2026-10-07 05:12 | Claude | A1.3 | RUN-OK | next: user browser-test manual GET ke /logout/ dapat 405 terverifikasi, jelasin alasan GET-trigger-pasif, minta rangkum sendiri
 2026-10-07 05:12 | Claude | A1.3 | REVIEW | next: user minta skip penjelasan ulang, ditolak sesuai aturan bukti, tanya ulang alasan GET berbahaya singkat
+2026-10-07 05:59 | Claude | - | HANDOFF-MERGED | next: lanjut A2.0 (shell, buat user + Group)
+2026-10-07 06:00 | Claude | - | HANDOFF-MERGED | next: lanjut A2.0 (shell, buat user + Group)
+2026-10-07 06:00 | Claude | - | HANDOFF-MERGED | next: lanjut A2.0 (shell, buat user + Group)
+2026-10-07 06:01 | Claude | - | HANDOFF-MERGED | next: lanjut A2.0 (shell, buat user + Group)
+2026-10-07 06:02 | Claude | - | HANDOFF-MERGED | next: lanjut A2.0 (shell, buat user + Group)

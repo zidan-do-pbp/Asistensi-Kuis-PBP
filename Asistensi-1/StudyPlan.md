@@ -200,18 +200,19 @@ Run `manage.py` commands from the folder that contains `manage.py`. Check: `Test
 - Tanggal kuis: [ISI USER: belum diketahui pasti, notes menandai [AMB]]
 - Task: A1-A4 = tugas Django. B1-B4 = tugas JS.
 - Soal latihan di repo (folder `soal1`, `soal2`, `soal3`, tema model/MVT/test Book): checklist S1-S3 di Section 3. Lokasi tepatnya ada di TODO-INDEX.md.
+- Project latihan Zydan sendiri (A1-A4/B1-B4, di luar repo soal1-3): dibuat dari nol di `Asistensi-1\quiz2-latihan\` (venv `env`, project config `quiz2_demo`, app `main`). File ini TIDAK dicommit ke repo soal1-3 secara campur, `.gitignore` sudah pasang `env/`, `db.sqlite3`, `__pycache__/`, `*.pyc`.
 
 ---
 
 ## 2. STATE SAAT INI (AI: update tiap handoff)
 
-- Terakhir diupdate: 2026-10-06 oleh Claude (tambah READ SCOPE, F6 commit log, branch latihan/solution, checklist S1-S3)
-- Total sesi belajar: 0
-- Progres Paham: 0/46 | Progres Latihan: 0/37
-- Fokus sekarang: belum mulai
-- NEXT ACTION: (setelah repo bersih + branch `latihan` siap) Mulai P1 dari A4.1 (login_required, paling cepat dan sering keluar), lanjut A2.0, lalu A1.1 dan A1.2.
-- Jalur belajar P1 yang disarankan: A4.1 -> A2.0 -> A1.1 -> A1.2 -> A2.2 -> A2.3 -> A2.4 -> A2.6 -> B1.1 -> B1.2 -> B2.1 -> B2.4 -> B2.5 -> B3.1 -> B3.2 -> B4.1 -> B4.2 -> B4.3
-- Catatan kondisi user (AI isi kalau relevan): -
+- Terakhir diupdate: 2026-10-07 oleh Claude (handoff setelah A1.1-A1.3 selesai)
+- Total sesi belajar: 1
+- Progres Paham: 3/46 | Progres Latihan: 1/37
+- Fokus sekarang: A1 (register/login/logout) jalan di project `quiz2-latihan`. A1.1-A1.3 selesai. A1.4 (cookie flags detail, P2) belum disentuh.
+- NEXT ACTION: lanjut A2.0 (Django shell, buat user + assign Group), prasyarat buat A2.1-A2.6 (role-based permission di project create/edit/delete). A1.4 bisa disisipkan kapan saja (P2, bukan blocking).
+- Jalur belajar P1 yang disarankan (sisa): A2.0 -> A2.2 -> A2.3 -> A2.4 -> A2.6 -> B1.1 -> B1.2 -> B2.1 -> B2.4 -> B2.5 -> B3.1 -> B3.2 -> B4.1 -> B4.2 -> B4.3 -> A4.1 (A4.1 ditunda karena butuh app dashboard terpisah dari project auth yang sudah ada, bisa digabung nanti)
+- Catatan kondisi user: pemula total soal Django, butuh breakdown granular tiap baris kode (bukan skeleton isi-titik, tapi 1 baris per giliran kalau stuck). Sering ketuker `{'key': val}` (dict) vs `{'key', val}` (set), sudah 2x kejadian (A1.1, A1.2), perlu diingatkan preventif tiap render context baru. Pola bug lain yang berulang: manggil ulang nama function sendiri alih-alih import Django bawaan (A1.2 logout_user/login_user ketuker).
 
 ---
 
@@ -223,11 +224,11 @@ Kolom: P = prioritas (P1 dikonfirmasi dosen/inti, P2 penting, P3 bonus). Node = 
 
 | ID | P | Topik (node id) | Paham | Latihan | Tgl | Catatan |
 |----|---|-----------------|-------|---------|-----|---------|
-| A1.1 | P1 | register: UserCreationForm, save, redirect login (`fn:register`) | [ ] | [ ] | - | |
-| A1.2 | P1 | login: AuthenticationForm, login(), set_cookie (`fn:login_user`) | [ ] | [ ] | - | |
-| A1.3 | P2 | logout: POST only 405, logout(), delete_cookie (`fn:logout_user`) | [ ] | [ ] | - | |
-| A1.4 | P2 | cookie last_login, flags max_age/httponly/samesite, no secrets (`concept:cookie_flags`, `rule:no_secrets_in_cookie`) | [ ] | [ ] | - | |
-| A2.0 | P1 | Django shell: buat user + assign Group (`tip:lab_prep_a2`, `concept:role_group`) | [ ] | [ ] | - | |
+| A1.1 | P1 | register: UserCreationForm, save, redirect login (`fn:register`) | [x] | [~] | 2026-10-07 | Paham: jelasin alasan is_valid sebelum save (cegah data invalid masuk DB) + 2 recall benar. Latihan: dikasih H3 setelah stuck lama di if-statement, bukan murni dari nol. Verified browser: form render benar, submit sukses (302). |
+| A1.2 | P1 | login: AuthenticationForm, login(), set_cookie (`fn:login_user`) | [x] | [~] | 2026-10-07 | Paham: jelasin alasan data= keyword + get_user ambil bukan query baru, 2 recall benar. Latihan: H3, 2 bug attempt (login_user manggil dirinya sendiri bukan Django login, dict vs set). Verified browser: POST login sukses (302). |
+| A1.3 | P2 | logout: POST only 405, logout(), delete_cookie (`fn:logout_user`) | [x] | [x] | 2026-10-07 | Latihan: ditulis dari kosong, 1 bug logic (lupa panggil logout()) dikoreksi sendiri setelah ditunjuk. Paham: jelasin alasan GET berbahaya (trigger pasif) pakai kata sendiri. Verified browser: GET /logout/ -> 405 (manual test, screenshot). |
+| A1.4 | P2 | cookie last_login, flags max_age/httponly/samesite, no secrets (`concept:cookie_flags`, `rule:no_secrets_in_cookie`) | [ ] | [ ] | - | Belum disentuh. Cookie value masih placeholder string, bukan timestamp asli (format `[AMB]` di notes, perlu diisi + 3 flag bonus). |
+| A2.0 | P1 | Django shell: buat user + assign Group (`tip:lab_prep_a2`, `concept:role_group`) | [ ] | [ ] | - | NEXT ACTION. |
 | A2.1 | P1 | Role = Group, tanpa superuser (`concept:role_group`, `rule:no_superuser`) | [ ] | - | - | |
 | A2.2 | P1 | create_project: Owner only, else 403 (`fn:create_project`) | [ ] | [ ] | - | |
 | A2.3 | P1 | edit_project: cek permission DULU, lalu get_object_or_404 (`fn:edit_project`) | [ ] | [ ] | - | |
@@ -236,7 +237,7 @@ Kolom: P = prioritas (P1 dikonfirmasi dosen/inti, P2 penting, P3 bonus). Node = 
 | A2.6 | P1 | template project_list: tombol per role + csrf_token + server-side check (`tmpl:project_list`, `rule:server_side_check`, `rule:post_csrf`) | [ ] | [ ] | - | |
 | A2.7 | P3 | bonus prefetch_related('starred_by') (`fn:project_list_bonus`) | [ ] | [ ] | - | |
 | A3.1 | P3 | A3 tidak dijelaskan di asistensi, kerjakan dari deskripsi + kode di GitHub tutorial | [ ] | [ ] | - | |
-| A4.1 | P1 | login_required + login_url di dashboard, tampilkan username (`fn:dashboard_protected`) | [ ] | [ ] | - | |
+| A4.1 | P1 | login_required + login_url di dashboard, tampilkan username (`fn:dashboard_protected`) | [ ] | [ ] | - | Ditunda, dikerjakan setelah A2 selesai (bisa reuse app `main` yang sama). |
 
 ### JavaScript (B1-B4)
 
@@ -249,7 +250,7 @@ Kolom: P = prioritas (P1 dikonfirmasi dosen/inti, P2 penting, P3 bonus). Node = 
 | B2.2 | P2 | `===` vs `==` vs `=` (`trap:eq_vs_strict`) | [ ] | - | - | |
 | B2.3 | P2 | openModal (bersihkan state lama) / closeModal (`fn:openModal`, `fn:closeModal`) | [ ] | [ ] | - | |
 | B2.4 | P1 | init wiring: addEventListener, renderReports(applyFilters()) (`concept:init_wiring`) | [ ] | [ ] | - | |
-| B2.5 | P1 | jebakan kurung: handler tanpa `()` (`trap:parentheses_on_handler`) | [ ] | - | - | |
+| B2.5 | P1 | jebakan kurung: handler tanpa `()` (`trap:parentheses_on_handler`) | [ ] | [ ] | - | |
 | B3.1 | P1 | loadReports: fetch GET, isLoading guard, try/catch/finally (`fn:loadReports`, `concept:busy_flag`) | [ ] | [ ] | - | |
 | B3.2 | P1 | async/await dan kenapa finally (`concept:async_await`, `why:finally`) | [ ] | - | - | |
 | B3.3 | P3 | bonus: validasi Array.isArray sebelum replace state | [ ] | [ ] | - | |
@@ -272,7 +273,7 @@ Kolom: P = prioritas (P1 dikonfirmasi dosen/inti, P2 penting, P3 bonus). Node = 
 | S2.4 | P1 | soal2 templates book_list.html TODO 4: loop, Tersedia/Stok habis/empty | [ ]   | [ ]     | -   |         |
 | S3.1 | P1 | soal3 main/tests.py TODO 1: setUp buat Book                         | [ ]   | [ ]     | -   |         |
 | S3.2 | P1 | soal3 main/tests.py TODO 2: test is_available                       | [ ]   | [ ]     | -   |         |
-| S3.3 | P1 | soal3 main/tests.py TODO 3: test status 200 + template              | [ ]   | [ ]     | -   |         |
+| S3.3 | P1 | soal3 main/tests.py TODO 3: test status 200 + template               | [ ]   | [ ]     | -   |         |
 | S3.4 | P1 | soal3 main/tests.py TODO 4: test judul, penulis, Tersedia di response | [ ]   | [ ]     | -   |         |
 | S3.5 | P1 | soal3 main/tests.py TODO 5: test daftar kosong                      | [ ]   | [ ]     | -   |         |
 | S3.6 | P3 | soal3 main/tests.py BONUS: hapus @skip, test stok 0                 | [ ]   | [ ]     | -   |         |
@@ -287,13 +288,13 @@ Kolom: P = prioritas (P1 dikonfirmasi dosen/inti, P2 penting, P3 bonus). Node = 
 
 ### Self-test bank (dari notes Section 1, tandai kalau user jawab benar tanpa hint)
 
+- [x] Kenapa semua aksi ubah data harus POST + CSRF token? (jawab via konteks logout: GET bisa ke-trigger pasif tanpa niat user)
 - [ ] Status HTTP apa untuk: method salah, tidak punya izin, objek tidak ada? (405, 403, 404)
 - [ ] Kenapa `textContent` bukan `innerHTML`? Kenapa event `submit` bukan `click`? Kenapa `finally`?
 - [ ] Apa yang harus terjadi sebelum `closeModal()` di B4 dan kenapa?
 - [ ] Cara tercepat melindungi satu view dari user anonim di lab?
 - [ ] Apa yang rusak di lab saat internet dibatasi dan cara memperbaikinya?
 - [ ] Kenapa menyembunyikan tombol di template BUKAN keamanan?
-- [ ] Kenapa semua aksi ubah data harus POST + CSRF token?
 
 ---
 
@@ -307,13 +308,14 @@ Kolom: P = prioritas (P1 dikonfirmasi dosen/inti, P2 penting, P3 bonus). Node = 
 
 ## 5. OPEN VERIFICATION (cek ke repo/slide user sebelum percaya; dari notes Section 5)
 
-- [ ] V1 format string timestamp cookie `last_login` (A1)
+- [ ] V1 format string timestamp cookie `last_login` (A1) — saat ini masih placeholder string `'placeholder'` di kode Zydan, bukan timestamp asli.
 - [ ] V2 bentuk nilai `login_url` (path atau nama route) (A4)
 - [ ] V3 definisi `user.is_owner` / `user.is_editor` di models (A2)
 - [ ] V4 DOM id pasti: `result-count`, id empty message (B1)
 - [ ] V5 nama header CSRF + encoding body di B4 (kemungkinan `X-CSRFToken` + `JSON.stringify`)
 - [ ] V6 key JSON list laporan di B3 (`data.reports` atau array langsung)
 - [ ] V7 tanggal kuis pasti
+- [ ] V8 tujuan redirect setelah login/logout sukses, saat ini placeholder `redirect('main:login')` dipakai di dua-duanya (login balik ke login, logout juga ke login), perlu diganti ke `home`/`dashboard` begitu halaman itu ada.
 
 ---
 
@@ -321,7 +323,12 @@ Kolom: P = prioritas (P1 dikonfirmasi dosen/inti, P2 penting, P3 bonus). Node = 
 
 | Tgl | Item | Kesalahan atau miskonsepsi user | Status (open/fixed) |
 |-----|------|----------------------------------|---------------------|
-| - | - | (belum ada) | - |
+| 2026-10-07 | A1.1 | `if form.is_valid:` tanpa kurung (truthy selalu True), ketemu lagi di A1.2 | fixed (dikoreksi sendiri setelah ditunjuk, 2x kejadian) |
+| 2026-10-07 | A1.1/A1.2 | `{'form', form}` (set) vs `{'form': form}` (dict) di context render, terjadi 2x (A1.1 lewat drill, A1.2 lewat bug asli) | fixed, tapi perlu diwaspadai berulang di B1-B4 (context dict js/django beda tapi pola typo serupa mungkin muncul lagi) |
+| 2026-10-07 | A1.1 | Awalnya kira alasan is_valid() sebelum save() itu "biar ga bisa dispam", bukan soal data integrity/cleaned_data | fixed setelah 2x review + contoh konkret password mismatch |
+| 2026-10-07 | A1.2 | Salah urutan argumen `AuthenticationForm(request.POST)` vs `AuthenticationForm(data=request.POST)`, belum tau kenapa harus keyword `data=` | fixed setelah dijelasin positional arg request vs data |
+| 2026-10-07 | A1.2 | `login_user(request, form.get_user())` manggil dirinya sendiri (rekursif) alih-alih Django `login()`, TypeError di traceback asli saat browser test | fixed |
+| 2026-10-07 | - | Sempat salah struktur project: `django-admin startproject quiz2_demo` tanpa titik (`.`) bikin manage.py nested 2x dan folder ganda tabrakan, harus di-reset total (`Remove-Item -Recurse`) dan redo dengan titik | fixed |
 
 ---
 
@@ -332,6 +339,7 @@ Format: `YYYY-MM-DD | AI (nama/model) | aktivitas | item disentuh + perubahan st
 - 2026-10-06 | Claude | setup file dari notes transkrip | tidak ada | mulai A4.1
 - 2026-10-06 | Claude | tambah Section 0B (style + format output + cheatsheet run) | tidak ada | mulai A4.1
 - 2026-10-06 | Claude | tambah Read scope, F6 commit log, ProgressLog.md, branch layout, checklist S1-S3; koreksi hitungan Latihan 29 -> 23 (+14 baris S = 37) | tidak ada | bersihkan repo, buat branch latihan, mulai A4.1
+- 2026-10-07 | Claude | sesi pertama: setup project `quiz2-latihan` dari nol (venv, startproject, startapp, INSTALLED_APPS, migrate), sempat ada struktur ganda (startproject tanpa titik) direset ulang; kerjakan A1.1 (register), A1.2 (login_user), A1.3 (logout_user) sampai verified browser; user tolak permintaan pakai personal access token GitHub di chat untuk commit/push (ditolak konsisten, alasan keamanan credential leak), AI tetap hanya menulis command, user yang menjalankan | A1.1 Paham [x] Latihan [~], A1.2 Paham [x] Latihan [~], A1.3 Paham [x] Latihan [x] | handoff, lanjut A2.0
 
 ### 7B. ProgressLog.md (file terpisah, append-only, ditulis lewat F6)
 
