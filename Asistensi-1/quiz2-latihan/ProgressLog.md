@@ -4,3 +4,4 @@
 2026-10-07 03:30 | Claude | SETUP | RUN-OK | next: fix ProgressLog path, gitignore, lalu startproject/startapp main, verify struktur folder
 2026-10-07 03:34 | Claude | SETUP | RUN-FAIL | next: output Get-ChildItem terpotong, minta ulang pakai path relatif, cek nested quiz2_demo
 2026-10-07 03:35 | Claude | SETUP | RUN-FAIL | next: struktur ganda ketemu (quiz2_demo nested duplikat), verify root manage.py pakai python manage.py check
+2026-10-07 03:36 | Claude | SETUP | RUN-FAIL | next: konfirmasi root manage.py salah pairing settings, hapus quiz2_demo+main+manage.py, redo bersih
