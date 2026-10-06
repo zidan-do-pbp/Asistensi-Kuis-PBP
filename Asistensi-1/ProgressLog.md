@@ -6,3 +6,4 @@
 2026-10-07 06:08 | Claude | A2.0 | ATTEMPT | next: shell terbuka (>>>), menunggu user tulis Group Owner + 1 user + hubungkan, paste hasil
 2026-10-07 06:09 | Claude | A2.0 | REVIEW | next: user ketik Owner polos kena NameError, tujuan A2.0 dijelaskan ulang, user import Group lalu buat Group lewat model
 2026-10-07 06:10 | Claude | A2.0 | EXPLAIN | next: user tanya kenapa pakai shell, dijawab dari notes (tip:lab_prep_a2 dan A4 lab shortcut), user lanjut import Group lalu buat Group Owner
+2026-10-07 06:11 | Claude | A2.0 | EXPLAIN | next: user minta urutan dari awal (env ke shell), dikasih 5 langkah, lalu lanjut import Group dan buat Group Owner
