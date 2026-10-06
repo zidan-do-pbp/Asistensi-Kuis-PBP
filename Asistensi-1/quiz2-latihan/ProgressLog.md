@@ -10,3 +10,4 @@
 2026-10-07 03:38 | Claude | SETUP | RUN-OK | next: migrate awal sukses, verify main sudah di INSTALLED_APPS sebelum lanjut A4.1
 2026-10-07 03:38 | Claude | SETUP | RUN-FAIL | next: main belum ada di INSTALLED_APPS, user edit settings.py manual lalu verify ulang
 2026-10-07 03:40 | Claude | SETUP | RUN-FAIL | next: masih kosong, user belum buka editor dan edit settings.py secara manual
+2026-10-07 03:41 | Claude | SETUP | EXPLAIN | next: user edit settings.py manual via editor (INSTALLED_APPS tambah main), verify pakai Select-String
