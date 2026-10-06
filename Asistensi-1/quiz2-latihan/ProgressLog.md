@@ -24,3 +24,4 @@
 2026-10-07 04:04 | Claude | A1.1 | REVIEW | next: WEAK:kurang_jelasin_url_dispatch_flow, user temukan bug indentasi return render di luar if, menunggu fix
 2026-10-07 04:08 | Claude | A1.1 | REVIEW | next: WEAK:GET_POST_dikira_otomatis_vs_manual_django, koreksi url dipetakan ke function bukan html, tanya recall client vs server execution
 2026-10-07 04:10 | Claude | A1.1 | PASS-recall | next: recall-1 benar (server eksekusi register via POST), tanya recall-2 soal form.is_valid() False
+2026-10-07 04:12 | Claude | A1.1 | PASS-recall | next: recall-2 benar setelah diperjelas, tanya alasan kenapa is_valid sebelum save untuk syarat terakhir Paham
