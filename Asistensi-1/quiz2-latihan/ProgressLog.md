@@ -54,3 +54,4 @@
 2026-10-07 05:10 | Claude | A1.3 | REVIEW | next: logout_user code clean + import lengkap, daftarkan ke urls.py, defer browser test sampai ada halaman dengan tombol logout asli
 2026-10-07 05:11 | Claude | A1.3 | PASS-latihan | next: Latihan A1.3 lulus (ditulis dari kosong, 1 bug logic dikoreksi sendiri), tanya alasan kenapa logout butuh POST only untuk syarat Paham
 2026-10-07 05:12 | Claude | A1.3 | RUN-OK | next: user browser-test manual GET ke /logout/ dapat 405 terverifikasi, jelasin alasan GET-trigger-pasif, minta rangkum sendiri
+2026-10-07 05:12 | Claude | A1.3 | REVIEW | next: user minta skip penjelasan ulang, ditolak sesuai aturan bukti, tanya ulang alasan GET berbahaya singkat
