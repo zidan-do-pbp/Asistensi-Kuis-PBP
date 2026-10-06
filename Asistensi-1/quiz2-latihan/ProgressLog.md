@@ -39,3 +39,4 @@
 2026-10-07 04:28 | Claude | A1.1 | DRILL | next: 2 error ketemu: import path forms submodule salah, dict pakai koma bukan titik dua, minta fix dua baris itu
 2026-10-07 04:28 | Claude | A1.1 | DRILL | next: import sudah benar, baris render masih pakai koma bukan titik dua, minta fix sekali lagi
 2026-10-07 04:29 | Claude | A1.1 | DRILL | next: drill selesai, 2 error dibenerin sendiri (import path, dict syntax), tanya lanjut A1.2 login_user
+2026-10-07 04:30 | Claude | A1.2 | ATTEMPT | next: user pilih langsung attempt tanpa jawab form.get_user dulu, menunggu kode login_user dari kosong
