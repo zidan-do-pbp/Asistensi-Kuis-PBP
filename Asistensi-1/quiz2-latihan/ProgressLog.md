@@ -19,3 +19,4 @@
 2026-10-07 03:53 | Claude | A1.1 | H1 | next: koreksi form.GET/POST salah, jelasin request.method dan 2 import satu-satu, tanya recall GET pertama buka halaman
 2026-10-07 03:54 | Claude | A1.1 | ATTEMPT | next: user paste isi default views.py, belum jawab recall GET vs POST pertama buka halaman
 2026-10-07 03:55 | Claude | A1.1 | PASS-recall | next: user jawab benar GET saat pertama buka halaman, lanjut tulis def register + baris if
+2026-10-07 03:56 | Claude | A1.1 | H3 | next: turunin ke 1 baris def register(request) saja, user belum submit perubahan nyata ke file
