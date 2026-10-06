@@ -30,3 +30,4 @@
 2026-10-07 04:18 | Claude | A1.1 | REVIEW | next: WEAK:alasan_is_valid_dikira_soal_spam_bukan_data_integrity, jelasin ulang form.save() dan alasan validasi, tanya ulang alasan paham
 2026-10-07 04:19 | Claude | A1.1 | REVIEW | next: user masih ketuker jawab fungsi save() bukan alasan urutan is_valid, tanya skenario konkret save tanpa cek valid
 2026-10-07 04:21 | Claude | A1.1 | REVIEW | next: WEAK:belum_ngeh_cleaned_data_vs_raw_POST, dikasih contoh konkret password mismatch, minta kesimpulan 1 kalimat
+2026-10-07 04:22 | Claude | A1.1 | PASS-paham | next: Paham A1.1 lulus (alasan is_valid benar + 2 recall), Latihan tetap setengah krn H3, tanya lanjut A1.2 vs A2.0
