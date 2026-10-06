@@ -27,3 +27,4 @@
 2026-10-07 04:12 | Claude | A1.1 | PASS-recall | next: recall-2 benar setelah diperjelas, tanya alasan kenapa is_valid sebelum save untuk syarat terakhir Paham
 2026-10-07 04:14 | Claude | A1.1 | REVIEW | next: WEAK:return_stops_execution_belum_ngeh, koreksi render bukan error page tapi form+errors, tanya ulang alasan is_valid sebelum save
 2026-10-07 04:16 | Claude | A1.1 | REVIEW | next: WEAK:return_stops_execution_belum_ngeh, koreksi render bukan error page tapi form+errors, tanya ulang alasan is_valid sebelum save
+2026-10-07 04:18 | Claude | A1.1 | REVIEW | next: WEAK:alasan_is_valid_dikira_soal_spam_bukan_data_integrity, jelasin ulang form.save() dan alasan validasi, tanya ulang alasan paham
