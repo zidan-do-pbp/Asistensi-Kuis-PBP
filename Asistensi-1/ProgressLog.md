@@ -17,3 +17,4 @@
 2026-10-07 06:20 | Claude | A2.0 | RUN-OK | next: verified editor1 di Group Editor, shell ditutup, tanya recall: kenapa role pakai Group bukan is_superuser, lalu A2.2
 2026-10-07 06:22 | Claude | A2.0 | REVIEW | next: user jawab alasan no_superuser separuh benar (superuser mem-bypass semua cek), Paham tetap [~] karena recall belum, Latihan [~] (H3). Preferensi user: JANGAN tanya recall/tebakan, ajari langsung. Lanjut A2.2, cek dulu file views.py dan model Project di quiz2-latihan
 2026-10-07 06:24 | Claude | A2.2 | RUN-OK | next: file project quiz2-latihan (main/, quiz2_demo/, manage.py) BELUM ada di GitHub, remote hanya ProgressLog.md. User commit+push file project, lalu AI baca main/models.py views.py urls.py
+2026-10-07 06:25 | Claude | A2.2 | RUN-FAIL | next: git add gagal karena AI salah beri path (user sudah di dalam quiz2-latihan). Beri ulang add dari dalam quiz2-latihan: .gitignore main quiz2_demo manage.py, tanpa Clean-Template.ps1
