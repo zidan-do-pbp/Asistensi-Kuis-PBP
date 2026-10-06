@@ -42,3 +42,4 @@
 2026-10-07 04:30 | Claude | A1.2 | ATTEMPT | next: user pilih langsung attempt tanpa jawab form.get_user dulu, menunggu kode login_user dari kosong
 2026-10-07 04:35 | Claude | A1.2 | ATTEMPT | next: user pilih langsung attempt tanpa jawab form.get_user dulu, menunggu kode login_user dari kosong
 2026-10-07 04:38 | Claude | A1.2 | H3 | next: full code login_user diberikan setelah 4 bug attempt, Latihan A1.2 max setengah, user update views.py lalu manage.py check
+2026-10-07 04:43 | Claude | A1.1-A1.2 | RUN-OK | next: daftarkan register dan login_user ke main/urls.py, verify check + runserver, expect TemplateDoesNotExist karena html belum ada
