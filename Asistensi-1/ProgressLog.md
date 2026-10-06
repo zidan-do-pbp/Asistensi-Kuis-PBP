@@ -4,3 +4,4 @@
 2026-10-07 06:06 | Claude | A2.0 | RUN-OK | next: kandidat project A1 = Asistensi-1\quiz2-latihan (path terpotong), user ambil full path manage.py lalu cd dan buka shell
 2026-10-07 06:07 | Claude | A2.0 | RUN-OK | next: manage.py = Asistensi-1\quiz2-latihan\manage.py, user cd ke sana, buka shell, tulis sendiri Group Owner + user
 2026-10-07 06:08 | Claude | A2.0 | ATTEMPT | next: shell terbuka (>>>), menunggu user tulis Group Owner + 1 user + hubungkan, paste hasil
+2026-10-07 06:09 | Claude | A2.0 | REVIEW | next: user ketik Owner polos kena NameError, tujuan A2.0 dijelaskan ulang, user import Group lalu buat Group lewat model
