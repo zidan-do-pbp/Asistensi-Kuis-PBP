@@ -8,3 +8,4 @@
 2026-10-07 03:37 | Claude | SETUP | RUN-OK | next: redo startproject dengan titik + startapp main, verify manage.py check
 2026-10-07 03:38 | Claude | SETUP | RUN-OK | next: verified manage.py check clean, daftarkan main di INSTALLED_APPS lalu migrate awal
 2026-10-07 03:38 | Claude | SETUP | RUN-OK | next: migrate awal sukses, verify main sudah di INSTALLED_APPS sebelum lanjut A4.1
+2026-10-07 03:38 | Claude | SETUP | RUN-FAIL | next: main belum ada di INSTALLED_APPS, user edit settings.py manual lalu verify ulang
