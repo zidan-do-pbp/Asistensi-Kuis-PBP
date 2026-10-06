@@ -51,3 +51,4 @@
 2026-10-07 05:08 | Claude | A1.3 | REVIEW | next: struktur if-else 405 sudah benar, tapi lupa panggil logout(request), minta tambah + import
 2026-10-07 05:08 | Claude | A1.3 | REVIEW | next: logout(request) sudah benar posisinya, cek import HttpResponseNotAllowed dan logout sebelum lanjut urls.py
 2026-10-07 05:08 | Claude | A1.3 | REVIEW | next: logout(request) sudah benar posisinya, cek import HttpResponseNotAllowed dan logout sebelum lanjut urls.py
+2026-10-07 05:10 | Claude | A1.3 | REVIEW | next: logout_user code clean + import lengkap, daftarkan ke urls.py, defer browser test sampai ada halaman dengan tombol logout asli
