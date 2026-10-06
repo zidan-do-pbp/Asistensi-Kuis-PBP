@@ -12,3 +12,4 @@
 2026-10-07 03:40 | Claude | SETUP | RUN-FAIL | next: masih kosong, user belum buka editor dan edit settings.py secara manual
 2026-10-07 03:41 | Claude | SETUP | EXPLAIN | next: user edit settings.py manual via editor (INSTALLED_APPS tambah main), verify pakai Select-String
 2026-10-07 03:42 | Claude | SETUP | RUN-OK | next: setup dasar selesai (venv, struktur, INSTALLED_APPS, migrate verified), tanya urutan A1 dulu vs A4.1 shortcut shell
+2026-10-07 03:43 | Claude | A1.1 | EXPLAIN | next: user total pemula, jelasin struktur file dulu, lanjut bikin main/urls.py sebelum views.py
