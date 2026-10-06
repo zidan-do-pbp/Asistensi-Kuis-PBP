@@ -52,3 +52,4 @@
 2026-10-07 05:08 | Claude | A1.3 | REVIEW | next: logout(request) sudah benar posisinya, cek import HttpResponseNotAllowed dan logout sebelum lanjut urls.py
 2026-10-07 05:08 | Claude | A1.3 | REVIEW | next: logout(request) sudah benar posisinya, cek import HttpResponseNotAllowed dan logout sebelum lanjut urls.py
 2026-10-07 05:10 | Claude | A1.3 | REVIEW | next: logout_user code clean + import lengkap, daftarkan ke urls.py, defer browser test sampai ada halaman dengan tombol logout asli
+2026-10-07 05:11 | Claude | A1.3 | PASS-latihan | next: Latihan A1.3 lulus (ditulis dari kosong, 1 bug logic dikoreksi sendiri), tanya alasan kenapa logout butuh POST only untuk syarat Paham
