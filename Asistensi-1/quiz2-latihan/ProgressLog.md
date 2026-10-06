@@ -41,3 +41,4 @@
 2026-10-07 04:29 | Claude | A1.1 | DRILL | next: drill selesai, 2 error dibenerin sendiri (import path, dict syntax), tanya lanjut A1.2 login_user
 2026-10-07 04:30 | Claude | A1.2 | ATTEMPT | next: user pilih langsung attempt tanpa jawab form.get_user dulu, menunggu kode login_user dari kosong
 2026-10-07 04:35 | Claude | A1.2 | ATTEMPT | next: user pilih langsung attempt tanpa jawab form.get_user dulu, menunggu kode login_user dari kosong
+2026-10-07 04:38 | Claude | A1.2 | H3 | next: full code login_user diberikan setelah 4 bug attempt, Latihan A1.2 max setengah, user update views.py lalu manage.py check
