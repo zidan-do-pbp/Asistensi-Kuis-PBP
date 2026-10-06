@@ -14,3 +14,4 @@
 2026-10-07 03:42 | Claude | SETUP | RUN-OK | next: setup dasar selesai (venv, struktur, INSTALLED_APPS, migrate verified), tanya urutan A1 dulu vs A4.1 shortcut shell
 2026-10-07 03:43 | Claude | A1.1 | EXPLAIN | next: user total pemula, jelasin struktur file dulu, lanjut bikin main/urls.py sebelum views.py
 2026-10-07 03:47 | Claude | A1.1 | EXPLAIN | next: user bikin main/urls.py + include di quiz2_demo/urls.py, verify manage.py check
+2026-10-07 03:51 | Claude | A1.1 | ATTEMPT | next: turunin granularitas, user coba tulis 1 baris if cek method POST dulu
