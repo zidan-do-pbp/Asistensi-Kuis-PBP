@@ -7,3 +7,4 @@
 2026-10-07 03:36 | Claude | SETUP | RUN-FAIL | next: konfirmasi root manage.py salah pairing settings, hapus quiz2_demo+main+manage.py, redo bersih
 2026-10-07 03:37 | Claude | SETUP | RUN-OK | next: redo startproject dengan titik + startapp main, verify manage.py check
 2026-10-07 03:38 | Claude | SETUP | RUN-OK | next: verified manage.py check clean, daftarkan main di INSTALLED_APPS lalu migrate awal
+2026-10-07 03:38 | Claude | SETUP | RUN-OK | next: migrate awal sukses, verify main sudah di INSTALLED_APPS sebelum lanjut A4.1
