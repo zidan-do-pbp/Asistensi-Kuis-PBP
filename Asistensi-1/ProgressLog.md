@@ -11,3 +11,4 @@
 2026-10-07 06:15 | Claude | A2.0 | EXPLAIN | next: setup sudah beres (env aktif, di quiz2-latihan, manage.py True), jangan ulang setup, user buka shell dan buat Group Owner
 2026-10-07 06:16 | Claude | A2.0 | RUN-OK | next: import Group, User berhasil tanpa error, menunggu user tulis perintah buat Group Owner
 2026-10-07 06:16 | Claude | A2.0 | H3 | next: user belum pernah lihat syntax, diajari langsung 3 baris (Group.objects.create, User.objects.create_user, user.groups.add), user ketik dan paste hasil, Latihan A2.0 maksimal [~]
+2026-10-07 06:18 | Claude | A2.0 | RUN-OK | next: 3 baris (Group Owner, user owner1, groups.add) jalan tanpa error, user verifikasi dengan user1.groups.all(), lalu buat Group Editor + user editor1
