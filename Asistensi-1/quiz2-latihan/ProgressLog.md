@@ -28,3 +28,4 @@
 2026-10-07 04:14 | Claude | A1.1 | REVIEW | next: WEAK:return_stops_execution_belum_ngeh, koreksi render bukan error page tapi form+errors, tanya ulang alasan is_valid sebelum save
 2026-10-07 04:16 | Claude | A1.1 | REVIEW | next: WEAK:return_stops_execution_belum_ngeh, koreksi render bukan error page tapi form+errors, tanya ulang alasan is_valid sebelum save
 2026-10-07 04:18 | Claude | A1.1 | REVIEW | next: WEAK:alasan_is_valid_dikira_soal_spam_bukan_data_integrity, jelasin ulang form.save() dan alasan validasi, tanya ulang alasan paham
+2026-10-07 04:19 | Claude | A1.1 | REVIEW | next: user masih ketuker jawab fungsi save() bukan alasan urutan is_valid, tanya skenario konkret save tanpa cek valid
