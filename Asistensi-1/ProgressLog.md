@@ -20,3 +20,4 @@
 2026-10-07 06:25 | Claude | A2.2 | RUN-FAIL | next: git add gagal karena AI salah beri path (user sudah di dalam quiz2-latihan). Beri ulang add dari dalam quiz2-latihan: .gitignore main quiz2_demo manage.py, tanpa Clean-Template.ps1
 2026-10-07 06:25 | Claude | A2.2 | RUN-FAIL | next: commit project 3316610 lokal OK, push ditolak karena log AI masuk duluan. User pull --rebase --autostash lalu push; setelah itu AI baca main/models.py views.py urls.py
 2026-10-07 06:26 | Claude | A2.2 | READ | next: project user ter-push (bf92ee6). models.py KOSONG, belum ada Project/ProjectForm/project_list/create_project. Scaffold dulu: Project model + forms.py + makemigrations + migrate, lalu template + view create_project
+2026-10-07 06:27 | Claude | A2.2 | EXPLAIN | next: user menolak file kode ditulis via terminal, semua file Django ditulis user sendiri di editor dipandu F1/F3. Mulai ulang scaffold: models.py Project dulu (langkah 1 dari 4)
