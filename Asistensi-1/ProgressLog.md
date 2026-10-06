@@ -13,3 +13,4 @@
 2026-10-07 06:16 | Claude | A2.0 | H3 | next: user belum pernah lihat syntax, diajari langsung 3 baris (Group.objects.create, User.objects.create_user, user.groups.add), user ketik dan paste hasil, Latihan A2.0 maksimal [~]
 2026-10-07 06:18 | Claude | A2.0 | RUN-OK | next: 3 baris (Group Owner, user owner1, groups.add) jalan tanpa error, user verifikasi dengan user1.groups.all(), lalu buat Group Editor + user editor1
 2026-10-07 06:18 | Claude | A2.0 | RUN-OK | next: verified user1.groups.all() = Group Owner, user minta buat Group Editor + user editor1 dengan pola yang sama, lalu recall alasan role = Group
+2026-10-07 06:20 | Claude | A2.0 | H3 | next: mode cepat atas permintaan user, kode Group Editor + user editor1 diberikan langsung, user ketik dan paste hasil, lalu exit() shell
