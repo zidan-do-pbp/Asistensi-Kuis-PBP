@@ -24,3 +24,4 @@
 2026-10-07 06:31 | Claude | A2.2 | REVIEW | next: models.py Project dari user benar (paste dibaca, belum dijalankan). Langkah: makemigrations+migrate, lalu user tulis main/forms.py ProjectForm
 2026-10-07 06:37 | Claude | A2.2 | RUN-OK | next: makemigrations + migrate sukses (main.0001_initial OK). Tabel Project ada. User lanjut: konfirmasi forms.py, lalu views.py project_list, urls, template project_list.html dan project_form.html, baru create_project
 2026-10-07 06:38 | Claude | A2.2 | EXPLAIN | next: user tanya kapan makemigrations (dijawab: hanya saat models.py berubah). Menunggu user simpan forms.py dan views.py project_list
+2026-10-07 06:40 | Claude | A2.2 | REVIEW | next: views.py project_list benar (paste dibaca). Langkah: tambah route project_list di main/urls.py, buat template main/project_list.html, runserver cek /projects/ kosong
