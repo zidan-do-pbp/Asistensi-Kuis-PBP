@@ -6,3 +6,4 @@
 2026-10-07 03:35 | Claude | SETUP | RUN-FAIL | next: struktur ganda ketemu (quiz2_demo nested duplikat), verify root manage.py pakai python manage.py check
 2026-10-07 03:36 | Claude | SETUP | RUN-FAIL | next: konfirmasi root manage.py salah pairing settings, hapus quiz2_demo+main+manage.py, redo bersih
 2026-10-07 03:37 | Claude | SETUP | RUN-OK | next: redo startproject dengan titik + startapp main, verify manage.py check
+2026-10-07 03:38 | Claude | SETUP | RUN-OK | next: verified manage.py check clean, daftarkan main di INSTALLED_APPS lalu migrate awal
