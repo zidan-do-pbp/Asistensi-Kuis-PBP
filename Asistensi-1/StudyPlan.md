@@ -167,13 +167,13 @@ Run `manage.py` commands from the folder that contains `manage.py`. Check: `Test
 
 ## 2. STATE SAAT INI (AI: update tiap handoff)
 
-- Terakhir diupdate: 2026-10-07 oleh Claude (orientasi repo, belum ada item belajar disentuh)
+- Terakhir diupdate: 2026-10-07 oleh Claude (orientasi repo + cek hasil push, belum ada item belajar disentuh)
 - Total sesi belajar: 0
 - Progres Paham: 0/32 | Progres Latihan: 0/23 (dihitung ulang dari tabel Section 3, sebelumnya tertulis 29)
-- Fokus sekarang: orientasi repo. Isi repo (soal1-3) tidak cocok dengan checklist A/B.
-- NEXT ACTION: Tunggu jawaban user: soal1-3 itu latihan untuk kuis yang mana, dan kode A1-B4 ada di repo/folder mana. Setelah peta jelas, mulai P1 dari A4.1 (kalau kode auth/JS ada) atau ikuti spec user.
+- Fokus sekarang: orientasi repo. Isi repo (soal1-3) tidak cocok dengan checklist A/B. File notes sudah ada di lokal (hasil git pull, 488 baris), belum dibaca.
+- NEXT ACTION: (1) Verifikasi jumlah baris StudyPlan.md vs origin/main (selisih -66 baris di commit eaf6054 belum dijelaskan). (2) Cari di notes: peta soal1-3 ke checklist (grep 'soal'). (3) Tunggu jawaban user: branch `latihan` sengaja atau harus ke `main`. Setelah peta jelas, mulai P1 dari A4.1 (kalau kode auth/JS ada) atau ikuti spec user.
 - Jalur belajar P1 yang disarankan: A4.1 -> A2.0 -> A1.1 -> A1.2 -> A2.2 -> A2.3 -> A2.4 -> A2.6 -> B1.1 -> B1.2 -> B2.1 -> B2.4 -> B2.5 -> B3.1 -> B3.2 -> B4.1 -> B4.2 -> B4.3
-- Catatan kondisi user (AI isi kalau relevan): ATURAN USER: setiap jawaban AI WAJIB ditutup command simpan progress (handoff PowerShell), karena session bisa habis kapan saja. Isi repo lokal (git ls-files + TODO-INDEX.md): soal1 (models Book), soal2 (MVT urls/views/template), soal3 (unit test). Tidak ada kode auth/CSRF/login_required/JS di repo ini. Lokasi kode A1-B4: not in notes.
+- Catatan kondisi user (AI isi kalau relevan): ATURAN USER: setiap jawaban AI WAJIB ditutup command simpan progress (handoff PowerShell), karena session bisa habis kapan saja. Isi repo lokal (git ls-files + TODO-INDEX.md): soal1 (models Book), soal2 (MVT urls/views/template), soal3 (unit test). Tidak ada kode auth/CSRF/login_required/JS di repo ini. Lokasi kode A1-B4: not in notes. BRANCH: lokal = `latihan`, push masuk ke origin/latihan (commit eaf6054), BUKAN main. Raw link di Section 0/1/8 menunjuk main, jadi AI baru fetch versi lama sampai di-merge ke main.
 
 ---
 
@@ -275,6 +275,7 @@ Format: `YYYY-MM-DD | AI (nama/model) | aktivitas | item disentuh + perubahan st
 - 2026-10-06 | Claude | setup file dari notes transkrip | tidak ada | mulai A4.1
 - 2026-10-06 | Claude | tambah Section 0B (style + format output + cheatsheet run) | tidak ada | mulai A4.1
 - 2026-10-07 | Claude | orientasi repo: baca git ls-files + TODO-INDEX.md. Repo = soal1 (models Book), soal2 (MVT), soal3 (unit test). Tidak ada kode auth/CSRF/login_required/JS, jadi A1-B4 tidak cocok dengan repo. Claude sempat salah asumsi lokasi kode = "tutorial", dikoreksi user. Hitung ulang Latihan 29 -> 23. User minta tiap jawaban AI ditutup command simpan | tidak ada | tentukan peta soal1-3 vs A/B
+- 2026-10-07 | Claude | push pertama sukses: commit eaf6054 ke origin/latihan (branch lokal = latihan, bukan main). git pull membawa notes-asistensi-django-auth-js.md (488 baris) ke lokal. Stat commit 68 insertions/134 deletions, selisih belum diverifikasi | tidak ada | cek jumlah baris vs origin/main, grep 'soal' di notes, konfirmasi soal branch
 
 ---
 
