@@ -34,3 +34,4 @@
 2026-10-07 04:22 | Claude | A1.1 | DRILL | next: mulai hafalan syntax register, ronde 1 fill-blank method is_valid dan save
 2026-10-07 04:24 | Claude | A1.1 | DRILL | next: fokus drill bagian sulit (import path auth.forms, redirect format main:login), ronde A
 2026-10-07 04:27 | Claude | A1.1 | DRILL | next: user skip jawaban ronde A dengan oke lanjut, diulang tanya 3 soal yang sama
+2026-10-07 04:27 | Claude | A1.1 | DRILL | next: user klaim berhasil tanpa bukti jawaban, tanya lanjut drill atau skip ke A1.2
