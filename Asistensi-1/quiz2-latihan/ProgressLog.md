@@ -32,3 +32,4 @@
 2026-10-07 04:21 | Claude | A1.1 | REVIEW | next: WEAK:belum_ngeh_cleaned_data_vs_raw_POST, dikasih contoh konkret password mismatch, minta kesimpulan 1 kalimat
 2026-10-07 04:22 | Claude | A1.1 | PASS-paham | next: Paham A1.1 lulus (alasan is_valid benar + 2 recall), Latihan tetap setengah krn H3, tanya lanjut A1.2 vs A2.0
 2026-10-07 04:22 | Claude | A1.1 | DRILL | next: mulai hafalan syntax register, ronde 1 fill-blank method is_valid dan save
+2026-10-07 04:24 | Claude | A1.1 | DRILL | next: fokus drill bagian sulit (import path auth.forms, redirect format main:login), ronde A
