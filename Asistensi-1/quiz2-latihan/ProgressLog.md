@@ -45,3 +45,4 @@
 2026-10-07 04:43 | Claude | A1.1-A1.2 | RUN-OK | next: daftarkan register dan login_user ke main/urls.py, verify check + runserver, expect TemplateDoesNotExist karena html belum ada
 2026-10-07 04:52 | Claude | A1.1 | RUN-OK | next: register.html browser test sukses, A1.2 2 bug ketemu (dict-vs-set berulang, login_user manggil dirinya sendiri bukan Django login), minta fix
 2026-10-07 04:53 | Claude | A1.2 | RUN-OK | next: bug 1 (dict) terkonfirmasi fix via GET render normal, minta kode terbaru + test POST submit login untuk verify bug 2 (login_user manggil dirinya sendiri)
+2026-10-07 04:56 | Claude | A1.2 | RUN-FAIL | next: bug 2 terkonfirmasi via traceback (login_user manggil dirinya sendiri, TypeError 1 vs 2 args), fix import login + ganti call, user retest POST login
