@@ -19,3 +19,4 @@
 2026-10-07 06:24 | Claude | A2.2 | RUN-OK | next: file project quiz2-latihan (main/, quiz2_demo/, manage.py) BELUM ada di GitHub, remote hanya ProgressLog.md. User commit+push file project, lalu AI baca main/models.py views.py urls.py
 2026-10-07 06:25 | Claude | A2.2 | RUN-FAIL | next: git add gagal karena AI salah beri path (user sudah di dalam quiz2-latihan). Beri ulang add dari dalam quiz2-latihan: .gitignore main quiz2_demo manage.py, tanpa Clean-Template.ps1
 2026-10-07 06:25 | Claude | A2.2 | RUN-FAIL | next: commit project 3316610 lokal OK, push ditolak karena log AI masuk duluan. User pull --rebase --autostash lalu push; setelah itu AI baca main/models.py views.py urls.py
+2026-10-07 06:26 | Claude | A2.2 | READ | next: project user ter-push (bf92ee6). models.py KOSONG, belum ada Project/ProjectForm/project_list/create_project. Scaffold dulu: Project model + forms.py + makemigrations + migrate, lalu template + view create_project
