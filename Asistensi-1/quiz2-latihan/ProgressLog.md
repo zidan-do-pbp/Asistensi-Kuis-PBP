@@ -50,3 +50,4 @@
 2026-10-07 05:02 | Claude | A1.3 | ATTEMPT | next: user pilih langsung attempt tanpa jawab recall GET dulu, menunggu kode logout_user dari kosong
 2026-10-07 05:08 | Claude | A1.3 | REVIEW | next: struktur if-else 405 sudah benar, tapi lupa panggil logout(request), minta tambah + import
 2026-10-07 05:08 | Claude | A1.3 | REVIEW | next: logout(request) sudah benar posisinya, cek import HttpResponseNotAllowed dan logout sebelum lanjut urls.py
+2026-10-07 05:08 | Claude | A1.3 | REVIEW | next: logout(request) sudah benar posisinya, cek import HttpResponseNotAllowed dan logout sebelum lanjut urls.py
