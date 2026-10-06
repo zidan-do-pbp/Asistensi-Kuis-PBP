@@ -142,7 +142,7 @@ Nilai `<event>` (pilih satu): `READ`, `EXPLAIN`, `ATTEMPT`, `REVIEW`, `H1`, `H2`
 
 `PS: ...\asistensi-kuis-pbp\Asistensi-1`
 ```powershell
-Select-String -Path (git ls-files '*.py','*.html','*.js') -Pattern 'TODO|BONUS'
+Get-ChildItem -Recurse -File -Include *.py,*.html,*.js | Where-Object { $_.FullName -notmatch '\\(venv|env|\.venv|__pycache__)\\' } | Select-String -Pattern 'TODO|BONUS'
 ```
 
 ### Read scope (hemat token, WAJIB)
