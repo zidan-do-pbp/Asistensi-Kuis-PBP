@@ -1,0 +1,100 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>Item Finder</title>
+
+  <link rel="stylesheet" href="{% static 'css/style.css' %}">
+  <script> window.REPORTS_URL = "{% url 'main:reports_json' %}";</script>
+  <script src="{% static 'js/itemfinder.js' %}" defer></script>
+</head>
+
+<body>
+  <main
+    id="app"
+    data-list-url="{% url 'main:reports_json' %}"
+    data-create-url="{% url 'main:add_report_ajax' %}"
+  >
+    <header>
+      <h1>Item Finder</h1>
+      <p>Bantu barang kembali ke pemiliknya.</p>
+    </header>
+
+    <section class="controls" aria-label="Kontrol laporan">
+      <input
+        id="search-input"
+        type="search"
+        placeholder="Cari judul barang..."
+        aria-label="Cari judul barang"
+      >
+
+      <select id="status-filter" aria-label="Filter status">
+        <option value="all">Semua</option>
+        <option value="hilang">Hilang</option>
+        <option value="ditemukan">Ditemukan</option>
+      </select>
+
+      <button id="refresh-button" type="button">
+        Muat ulang data
+      </button>
+
+      <button id="open-modal" type="button">
+        Buat laporan
+      </button>
+    </section>
+
+    <p id="load-message" role="status" aria-live="polite"></p>
+    <p id="result-count">0 laporan</p>
+
+    <section
+      id="report-list"
+      aria-label="Daftar laporan"
+    ></section>
+
+    <p id="empty-message" hidden>
+      Tidak ada laporan yang sesuai.
+    </p>
+  </main>
+
+  <dialog id="report-modal" aria-labelledby="modal-title">
+    <h2 id="modal-title">Buat laporan</h2>
+
+    <form id="report-form" novalidate>
+      {% csrf_token %}
+
+      <label>
+        Judul barang
+        <input name="title" maxlength="80">
+      </label>
+
+      <label>
+        Lokasi
+        <input name="location" maxlength="80">
+      </label>
+
+      <label>
+        Status
+        <select name="status">
+          <option value="hilang">Hilang</option>
+          <option value="ditemukan">Ditemukan</option>
+        </select>
+      </label>
+
+      <p id="form-message" role="alert"></p>
+
+      <button id="submit-button" type="submit">
+        Simpan
+      </button>
+
+      <button id="close-modal" type="button">
+        Tutup
+      </button>
+    </form>
+  </dialog>
+
+  {{ initial_reports|json_script:"initial-reports" }}
+</body>
+</html>
