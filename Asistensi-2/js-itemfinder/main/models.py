@@ -1,6 +1,8 @@
 from django.db import models
 
 
+# DOKUMENTASI (jangan diubah). Satu Report = satu laporan barang. status hanya boleh "hilang" atau "ditemukan" (STATUS_CHOICES).
+# Field title/location/status adalah key JSON yang dibaca itemfinder.js dan dikirim submitReport().
 class Report(models.Model):
     STATUS_CHOICES = [
         ("hilang", "Hilang"),

@@ -1,3 +1,4 @@
+{# DOKUMENTASI (template kuis, jangan diubah): dipakai LoginView bawaan (urls.py template_name='main/login.html'). Konteks form disediakan Django, tidak perlu view buatan #}
 <!DOCTYPE html>
 <html lang="id"><head><meta charset="UTF-8"><title>Login</title></head>
 <body><h1>Login</h1><form method="post">{% csrf_token %}{{ form.as_p }}<button>Login</button></form></body></html>

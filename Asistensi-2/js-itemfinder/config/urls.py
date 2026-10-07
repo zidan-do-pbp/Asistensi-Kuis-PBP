@@ -17,6 +17,8 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import include, path
 
+# DOKUMENTASI (file ini jangan diubah): path('', include('main.urls')) = semua URL di main/urls.py dipasang di root (alamat kosong).
+# Makanya /login/ di main/urls.py jadi http://127.0.0.1:8000/login/. 'admin/' = halaman admin Django. Awalan 'main:' dari app_name di main/urls.py.
 urlpatterns = [
     path('admin/', admin.site.urls),
     path("", include("main.urls")),
