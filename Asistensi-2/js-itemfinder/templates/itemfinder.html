@@ -8,11 +8,14 @@
   <title>Item Finder</title>
 
   <link rel="stylesheet" href="{% static 'css/style.css' %}">
+  {# HUBUNGAN: window.REPORTS_URL dibaca itemfinder.js sebagai BASE_REPORTS_ENDPOINT. URL dibuat dari name di main/urls.py #}
   <script> window.REPORTS_URL = "{% url 'main:reports_json' %}";</script>
+  {# defer: JS jalan setelah HTML selesai dimuat, jadi document.getElementById di atas file JS aman #}
   <script src="{% static 'js/itemfinder.js' %}" defer></script>
 </head>
 
 <body>
+  {# HUBUNGAN: data-list-url -> app.dataset.listUrl (loadReports, SOAL 3). data-create-url -> app.dataset.createUrl (submitReport, SOAL 4). Nama atribut data-list-url jadi camelCase listUrl di JS #}
   <main
     id="app"
     data-list-url="{% url 'main:reports_json' %}"
@@ -62,6 +65,7 @@
   <dialog id="report-modal" aria-labelledby="modal-title">
     <h2 id="modal-title">Buat laporan</h2>
 
+    {# HUBUNGAN: id report-form = const form di JS. {% csrf_token %} membuat input csrfmiddlewaretoken yang dibaca submitReport() untuk header X-CSRFToken #}
     <form id="report-form" novalidate>
       {% csrf_token %}
 
@@ -95,6 +99,7 @@
     </form>
   </dialog>
 
+  {# HUBUNGAN: json_script membuat <script id="initial-reports" type="application/json"> dari initial_reports (dikirim show_itemfinder). JS: JSON.parse(getElementById("initial-reports").textContent) #}
   {{ initial_reports|json_script:"initial-reports" }}
 </body>
 </html>
