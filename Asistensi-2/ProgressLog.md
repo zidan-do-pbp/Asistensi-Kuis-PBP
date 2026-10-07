@@ -9,3 +9,4 @@
 2026-10-07 08:12 | Claude | J1-J4 | REVIEW | next: itemfinder.js latihan tadinya kerangka kosong; versi solusi ber-TODO+jawaban (solution/js-itemfinder) lolos node --check, user salin ke js-itemfinder lalu commit sendiri. NEXT ACTION D1.1 register
 2026-10-07 08:15 | Claude | D1-D4,J1-J4 | RUN-OK | next: 6 file kuis (views soal1-3, project_list.html, dashboard.html, itemfinder.js) diisi jawaban + TODO + HUBUNGAN, tes 4 proyek lulus. Ada di branch claude-staging (01c9253), belum di latihan: user yang commit. NEXT ACTION D1.1 register
 2026-10-07 08:16 | Claude | D1-D4,J1-J4 | RUN-OK | next: file kuis sekarang langsung di latihan (user minta, aturan lama user-commit dicabut untuk file kuis). NEXT ACTION D1.1 register
+2026-10-07 08:18 | Claude | DOC | RUN-OK | next: urls.py 4 soal + js views.py + itemfinder.html diberi komentar HUBUNGAN, tes lulus. NEXT ACTION D1.1 register
