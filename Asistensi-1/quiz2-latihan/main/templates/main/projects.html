@@ -2,8 +2,8 @@
 
 <ul>
     {% for p in projects %}
-    <li>{{p.name}} - {{p.description}}</li>
+    <li>{{p.name}} - {{p.description}} <a href="{% url 'main:edit_project' p.id %}">Edit</a></li>
     {% empty %}
     <li>Belum ada project.</li>
     {% endfor %}
-</ul>
+</ul> 
