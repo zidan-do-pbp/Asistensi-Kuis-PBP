@@ -1,7 +1,9 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import login, logout
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
-from django.http import HttpResponseNotAllowed
+from django.http import HttpResponseNotAllowed, HttpResponseForbidden
+from .models import Project
+from .forms import ProjectForm
 
 def register(request):
     if request.method == 'POST':
@@ -18,7 +20,7 @@ def login_user(request):
         form = AuthenticationForm(data=request.POST)
         if form.is_valid():
             login(request, form.get_user())
-            response = redirect('main:login')
+            response = redirect('main:create_project')
             response.set_cookie('last_login', 'placeholder')
             return response
     else:
@@ -32,3 +34,16 @@ def logout_user(request):
         response.delete_cookie('last_login')
         return response
     return HttpResponseNotAllowed(['POST'])
+
+def project_list(request):
+    projects = Project.objects.all()
+    return render(request, 'main/projects.html', {'projects': projects})
+
+def create_project(request):
+    if not request.user.groups.filter(name='Owner').exists():
+        return HttpResponseForbidden()
+    form = ProjectForm(request.POST or None)
+    if request.method == 'POST' and form.is_valid():
+        form.save()
+        return redirect('main:project_list')
+    return render(request, 'main/projects_form.html', {"form": form})

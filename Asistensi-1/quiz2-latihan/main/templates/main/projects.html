@@ -1,0 +1,9 @@
+<h1>Daftar Project</h1>
+
+<ul>
+    {% for p in projects %}
+    <li>{{p.name}} - {{p.description}}</li>
+    {% empty %}
+    <li>Belum ada project.</li>
+    {% endfor %}
+</ul>
