@@ -4,6 +4,7 @@ Cari penanda `TODO: (urutan N)` di tiap file. Angka N = urutan kerja, huruf (1a,
 Python memakai `# TODO`, template memakai `{# TODO #}`, JavaScript memakai `//TODO`.
 
 Catatan tambahan dari transkrip video (intel kuis, tips lab, jebakan, tabel HTTP): lihat `CATATAN-TRANSKRIP.md`.
+Setup environment dan command terminal: `RUN-COMMANDS.txt`. Copy-paste untuk `python manage.py shell`: `SHELL-COPYPASTE.txt`.
 
 ## Django Soal 1: Autentikasi, Session, Cookie (soal1)
 Ubah hanya `main/views.py`.

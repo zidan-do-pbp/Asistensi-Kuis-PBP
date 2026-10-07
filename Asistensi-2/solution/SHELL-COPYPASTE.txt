@@ -1,0 +1,161 @@
+=====================================================================
+SHELL-COPYPASTE.txt  |  python manage.py shell untuk Kuis 2 PBP
+=====================================================================
+Cara pakai:
+  1. Masuk folder yang ada manage.py (soal1 / soal2 / soal3 / js-itemfinder)
+  2. Aktifkan venv dulu, lalu:   python manage.py shell
+  3. Paste blok di bawah. Keluar shell:   exit()   atau  Ctrl+Z lalu Enter (Windows)
+
+ATURAN PASTE (sering bikin error):
+  - Blok for/if di shell interaktif butuh BARIS KOSONG setelahnya. Kalau
+    ragu, pakai versi satu baris (ditandai [1 BARIS]) atau pakai
+    exec(open('seed_users.py').read()) yang sudah ada di folder soal.
+  - Jangan ubah indentasi saat copy.
+  - Satu paste = satu blok. Kalau error di tengah, ulangi blok itu saja.
+
+Versi non-interaktif (tanpa masuk shell), cocok dari PowerShell:
+  python manage.py shell -c "print(1+1)"
+  Di PowerShell, pakai kutip ganda di luar dan kutip tunggal di dalam.
+
+---------------------------------------------------------------------
+A. USER DAN GROUP (soal 1, 2, 3, 4)
+---------------------------------------------------------------------
+# A1. Import (selalu paling atas)
+from django.contrib.auth.models import User, Group
+
+# A2. Buat satu user biasa
+User.objects.create_user("regular", password="aaaaa")
+
+# A3. Buat tiga akun soal 2 sekaligus  [1 BARIS per baris]
+regular = User.objects.create_user("regular", password="aaaaa")
+editor = User.objects.create_user("editor", password="aaaaa")
+owner = User.objects.create_user("owner", password="aaaaa")
+
+# A4. Masukkan ke Group (Group Editor dan Owner dibuat oleh migrasi 0002)
+editor.groups.add(Group.objects.get(name="Editor"))
+owner.groups.add(Group.objects.get(name="Owner"))
+
+# A5. Versi aman dijalankan berulang (tidak error kalau user sudah ada)
+u, _ = User.objects.get_or_create(username="regular")
+u.set_password("aaaaa")
+u.save()
+
+# A6. Lihat semua user dan group-nya
+list(User.objects.values_list("username", flat=True))
+for u in User.objects.all(): print(u.username, list(u.groups.values_list("name", flat=True)))
+
+# A7. Cek apakah user punya role (sama dengan has_role di views.py)
+User.objects.get(username="owner").groups.filter(name="Owner").exists()
+
+# A8. Cabut role / ganti password / hapus user
+editor.groups.remove(Group.objects.get(name="Editor"))
+User.objects.get(username="regular").set_password("baru123")   # lalu .save()
+User.objects.filter(username="regular").delete()
+
+# A9. Superuser (hanya untuk /admin/, JANGAN dipakai untuk hak akses fitur)
+#     Dari terminal biasa, bukan di dalam shell:
+#       python manage.py createsuperuser
+#       python manage.py changepassword <username>
+
+# A10. Daftar group yang ada
+list(Group.objects.values_list("name", flat=True))
+
+# A11. Satu baris dari PowerShell (tanpa masuk shell)
+python manage.py shell -c "from django.contrib.auth.models import User; User.objects.create_user('regular', password='aaaaa')"
+
+---------------------------------------------------------------------
+B. SEED OTOMATIS YANG SUDAH ADA DI REPO
+---------------------------------------------------------------------
+soal2 :  python manage.py loaddata projects
+         python manage.py shell -c "exec(open('seed_users.py').read())"
+soal3 :  python manage.py shell -c "exec(open('seed_user.py').read())"
+Login tes: regular / aaaaa   (soal2 juga editor / aaaaa dan owner / aaaaa)
+
+---------------------------------------------------------------------
+C. PROJECT DAN STAR (soal 2)
+---------------------------------------------------------------------
+from main.models import Project
+from django.contrib.auth.models import User
+
+# C1. Buat project
+Project.objects.create(title="Proyek A", description="Deskripsi A")
+
+# C2. Lihat semua
+for p in Project.objects.all(): print(p.id, p.title, p.starred_by.count())
+
+# C3. Star manual (sama dengan toggle_star)
+p = Project.objects.get(pk=1)
+u = User.objects.get(username="regular")
+p.starred_by.add(u)
+p.starred_by.remove(u)
+p.starred_by.filter(pk=u.pk).exists()
+
+# C4. Siapa saja yang star dan project apa yang di-star user
+list(p.starred_by.values_list("username", flat=True))
+list(u.starred_projects.values_list("title", flat=True))
+
+# C5. Hapus semua project (hati-hati)
+Project.objects.all().delete()
+
+---------------------------------------------------------------------
+D. REPORT (js-itemfinder, soal JS)
+---------------------------------------------------------------------
+from main.models import Report
+
+# D1. Isi data contoh
+Report.objects.create(title="Dompet hitam", location="Kantin", status="hilang")
+Report.objects.create(title="Kunci motor", location="Perpustakaan", status="ditemukan")
+Report.objects.create(title="Botol minum", location="Lab", status="hilang")
+
+# D2. Lihat dan hitung
+list(Report.objects.order_by("-id").values())
+Report.objects.filter(status="hilang").count()
+
+# D3. Hapus semua
+Report.objects.all().delete()
+
+---------------------------------------------------------------------
+E. SESSION DAN COOKIE (soal 3, untuk memeriksa hasil)
+---------------------------------------------------------------------
+from django.contrib.sessions.models import Session
+
+# E1. Lihat isi semua session yang tersimpan di database
+for s in Session.objects.all(): print(s.session_key, s.get_decoded())
+#   Hasil contoh: {'_auth_user_id': '1', ..., 'visit_count': 3, 'theme': 'dark'}
+#   Setelah reset_preferences: visit_count dan theme hilang, _auth_user_id tetap ada.
+
+# E2. Hapus semua session (semua user ter-logout, berguna untuk uji ulang)
+Session.objects.all().delete()
+
+# E3. Cookie dicek di browser: F12 > Application (Chrome) > Cookies
+#     last_login (soal 1), announcement_dismissed (soal 3), sessionid, csrftoken
+
+---------------------------------------------------------------------
+F. UTILITAS UMUM
+---------------------------------------------------------------------
+# F1. Lihat query SQL yang dihasilkan (cek efek prefetch_related)
+from django.db import connection, reset_queries
+from django.conf import settings
+from main.models import Project
+settings.DEBUG = True   # sudah True di proyek ini, baris ini aman
+reset_queries()
+list(Project.objects.prefetch_related("starred_by"))
+len(connection.queries)
+
+# F2. Daftar tabel dan model yang ada
+from django.apps import apps
+[m.__name__ for m in apps.get_models()]
+
+# F3. Cek waktu yang dipakai cookie last_login (format soal 1)
+from django.utils import timezone
+timezone.localtime().strftime("%Y-%m-%d %H:%M:%S")
+
+# F4. Tes view tanpa browser (Django test client)
+#     WAJIB setup_test_environment() dulu, kalau tidak muncul DisallowedHost (testserver).
+#     Ini memakai database asli (db.sqlite3), jadi user dan data harus sudah ada.
+from django.test.utils import setup_test_environment; setup_test_environment()
+from django.test import Client
+c = Client()
+c.login(username="owner", password="aaaaa")
+c.get("/").status_code
+c.post("/projects/1/star/").status_code   # 302 = sukses, 403/405 = ditolak

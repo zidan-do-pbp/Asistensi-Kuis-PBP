@@ -1,0 +1,267 @@
+=====================================================================
+RUN-COMMANDS.txt  |  Setup dan command berguna Kuis 2 PBP (Django + JS)
+=====================================================================
+Isi:
+  1. Setup hari kuis (template diunduh, paste, siapkan environment)
+  2. Menjalankan tiap soal
+  3. Command manage.py yang berguna
+  4. Command terminal yang berguna (pip, venv, git, curl)
+  5. Pemecahan masalah
+  6. Checklist 5 menit sebelum mengerjakan
+
+Catatan sistem: perintah utama ditulis untuk PowerShell (Windows).
+Padanan Mac/Linux ditandai [bash].
+
+=====================================================================
+1. SETUP HARI KUIS
+=====================================================================
+1.1 Ekstrak template ke folder kerja, masuk ke folder yang ada manage.py
+    (di tiap soal manage.py ada di dalam folder soal, bukan di folder atas).
+
+    cd <folder-template>\soal1
+    dir                       # pastikan ada manage.py   [bash: ls]
+
+1.2 Buat dan aktifkan virtual environment (cukup sekali per folder kerja)
+
+    python -m venv env
+    .\env\Scripts\Activate.ps1          [bash: source env/bin/activate]
+
+    Tanda berhasil: prompt diawali (env).
+    Jika PowerShell menolak skrip (execution policy):
+      Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
+      lalu ulangi Activate.ps1
+    Alternatif tanpa PowerShell: cmd.exe, lalu  env\Scripts\activate.bat
+
+1.3 Pasang dependensi (INI BIASANYA PENYEBAB MASALAH DI LAB, kuis 1 banyak yang kena)
+
+    Jalur cepat, cukup untuk menjalankan semua soal:
+      soal1, soal2, soal3 :  pip install "django~=5.2" python-dotenv
+      js-itemfinder       :  pip install "django>=5.2,<5.3"
+
+    PENTING: settings.py soal1 sampai soal3 mengimpor dotenv di baris atas.
+    Kalau python-dotenv tidak terpasang, muncul
+      ModuleNotFoundError: No module named 'dotenv'
+    Jadi jangan pasang Django saja untuk soal1 sampai soal3.
+
+    Jalur lengkap (sesuai requirements.txt):
+      pip install -r requirements.txt
+    requirements.txt memuat gunicorn, psycopg2-binary, whitenoise, python-dotenv.
+    psycopg2-binary dan gunicorn hanya untuk deploy. Kalau pip gagal atau lambat,
+    lewati dan pakai jalur cepat di atas. SQLite dipakai selama PRODUCTION tidak
+    diaktifkan, jadi PostgreSQL tidak diperlukan.
+
+1.4 Kalau jaringan lab membatasi internet (siapkan DI RUMAH, 1 sampai 2 hari sebelumnya)
+
+    Unduh wheel ke folder, simpan ke flashdisk:
+      pip download "django~=5.2" python-dotenv -d wheels
+    Di lab, pasang tanpa internet:
+      pip install --no-index --find-links wheels "django~=5.2" python-dotenv
+
+    Cek versi Python di lab sama dengan di rumah:  python --version
+
+1.5 Pastikan berjalan sebelum menulis kode
+
+    python manage.py check
+    python manage.py migrate
+    python manage.py runserver
+    Buka  http://127.0.0.1:8000/
+
+=====================================================================
+2. MENJALANKAN TIAP SOAL
+=====================================================================
+Django soal 1 (autentikasi):
+    cd soal1
+    python manage.py migrate
+    python manage.py runserver
+    Buka /register/ lalu daftar, /login/, cek last_login di beranda.
+
+Django soal 2 (otorisasi, star):
+    cd soal2
+    python manage.py migrate
+    python manage.py loaddata projects
+    python manage.py shell -c "exec(open('seed_users.py').read())"
+    python manage.py runserver
+    Akun: regular, editor, owner  (password aaaaa)
+    Kalau di kuis seed_users.py tidak ada, lihat SHELL-COPYPASTE.txt bagian A.
+
+Django soal 3 dan 4 (session, cookie, dashboard):
+    cd soal3
+    python manage.py migrate
+    python manage.py shell -c "exec(open('seed_user.py').read())"
+    python manage.py runserver
+    Buka /  (otomatis ke /login/ jika belum login). Akun regular / aaaaa.
+    Bukti soal 4: logout, ketik URL dashboard langsung, harus redirect ke
+    /login/?next=/
+
+JavaScript (js-itemfinder):
+    cd js-itemfinder
+    python manage.py migrate
+    python manage.py runserver
+    Buka /  lalu F12 untuk Console dan Network.
+    Isi data contoh lewat shell: SHELL-COPYPASTE.txt bagian D.
+
+Uji otomatis (semua kontrak soal, tanpa browser):
+    python manage.py test
+    python manage.py test main.tests.T -v 2        # satu kelas, detail
+
+=====================================================================
+3. COMMAND manage.py YANG BERGUNA
+=====================================================================
+Server dan cek
+    python manage.py runserver                  # http://127.0.0.1:8000
+    python manage.py runserver 8080             # ganti port jika 8000 terpakai
+    python manage.py runserver 0.0.0.0:8000     # bisa diakses perangkat lain
+    python manage.py check                      # cek konfigurasi, cepat
+    python manage.py check --deploy             # cek keamanan (tidak perlu di kuis)
+    python manage.py diffsettings               # settings yang diubah dari default
+    python manage.py --version                  # versi Django
+
+Database dan migrasi
+    python manage.py migrate                    # terapkan migrasi (buat tabel)
+    python manage.py makemigrations             # buat file migrasi dari perubahan model
+    python manage.py makemigrations main        # khusus app main
+    python manage.py showmigrations             # daftar migrasi, [X] = sudah dijalankan
+    python manage.py sqlmigrate main 0001       # lihat SQL migrasi
+    python manage.py migrate main zero          # batalkan semua migrasi app main
+    python manage.py dbshell                    # konsol SQL (perlu sqlite3 terpasang)
+    python manage.py flush                      # kosongkan SEMUA data (tabel tetap ada)
+    Reset total SQLite:  hapus file db.sqlite3, lalu  python manage.py migrate
+      PowerShell:  Remove-Item db.sqlite3      [bash: rm db.sqlite3]
+
+Data
+    python manage.py loaddata projects                      # muat fixture (soal2)
+    python manage.py dumpdata main --indent 2               # ekspor data app main
+    python manage.py dumpdata main > backup.json            # simpan ke file
+    python manage.py dumpdata auth.User --indent 2          # ekspor user
+
+User
+    python manage.py createsuperuser            # untuk /admin/ saja
+    python manage.py changepassword <username>
+    python manage.py clearsessions              # hapus session kedaluwarsa
+
+Shell
+    python manage.py shell                      # REPL Django (lihat SHELL-COPYPASTE.txt)
+    python manage.py shell -c "print(1+1)"      # sekali jalan
+    python manage.py shell -c "exec(open('seed_user.py').read())"
+
+Struktur
+    python manage.py startapp <nama>            # buat app baru
+    python manage.py showmigrations             # cek tabel sudah dibuat
+    python manage.py inspectdb                  # model dari tabel yang ada (jarang)
+    python manage.py collectstatic              # hanya untuk deploy (jarang)
+
+Tes
+    python manage.py test                       # semua tes
+    python manage.py test main                  # hanya app main
+    python manage.py test --keepdb              # pakai ulang database tes
+    python manage.py test -v 2                  # keluaran rinci
+
+Bantuan
+    python manage.py help                       # daftar semua command
+    python manage.py help <command>             # penjelasan satu command
+
+=====================================================================
+4. COMMAND TERMINAL YANG BERGUNA
+=====================================================================
+Navigasi (PowerShell dan bash)
+    pwd                         # folder sekarang
+    dir   [bash: ls]            # isi folder
+    cd ..                       # naik satu folder
+    cd <folder>                 # masuk folder
+    mkdir <nama>
+    Remove-Item <file>          [bash: rm <file>]
+    Remove-Item -Recurse -Force <folder>     [bash: rm -rf <folder>]
+    Get-Content <file>          [bash: cat <file>]     # lihat isi file
+    Select-String "kata" -Path *.py -Recurse             [bash: grep -rn "kata" .]
+    Ctrl+C                      # hentikan runserver
+    Ctrl+L atau cls             # bersihkan layar
+
+Python, venv, pip
+    python --version
+    python -m venv env
+    .\env\Scripts\Activate.ps1  [bash: source env/bin/activate]
+    deactivate                  # keluar dari venv
+    pip list                    # paket terpasang
+    pip show django             # versi Django
+    pip install "django~=5.2" python-dotenv
+    pip install -r requirements.txt
+    pip freeze > requirements.txt
+    where.exe python            [bash: which python]    # pastikan python dari env
+
+Cari proses yang memakai port 8000 dan matikan (Windows)
+    netstat -ano | findstr :8000
+    taskkill /PID <nomor-pid> /F
+
+Git
+    git status
+    git add .
+    git commit -m "pesan"
+    git log --oneline -5
+    git diff                    # perubahan yang belum di-add
+    git pull --rebase --autostash origin <branch>
+    git push origin HEAD
+    git restore <file>          # batalkan perubahan file (hati-hati)
+    git clone --branch <branch> <url>
+
+curl untuk uji endpoint tanpa browser
+    Windows pakai  curl.exe  (bukan alias curl milik PowerShell).
+    curl.exe -i http://127.0.0.1:8000/reports/data/                 # GET JSON
+    curl.exe -i -X POST http://127.0.0.1:8000/logout/               # tanpa CSRF = 403
+    curl.exe -i -c jar.txt http://127.0.0.1:8000/login/             # simpan cookie
+    Cek header Set-Cookie (HttpOnly, SameSite=Lax, Max-Age) di keluaran -i.
+
+=====================================================================
+5. PEMECAHAN MASALAH
+=====================================================================
+ModuleNotFoundError: No module named 'django'
+    venv belum aktif atau Django belum dipasang. Aktifkan env, pip install.
+ModuleNotFoundError: No module named 'dotenv'
+    pip install python-dotenv   (wajib untuk soal1 sampai soal3)
+python manage.py ... : "can't open file manage.py"
+    Anda bukan di folder soal. cd ke folder yang berisi manage.py.
+django.db.utils.OperationalError: no such table
+    Belum migrate:  python manage.py migrate
+Error: That port is already in use
+    Pakai port lain (runserver 8080) atau matikan prosesnya (bagian 4).
+TemplateDoesNotExist
+    Cek nama template di render() sama persis dengan nama file
+    (mis. main/project_form.html), dan folder templates ada di BASE_DIR.
+NoReverseMatch
+    Nama route di {% url 'main:...' %} atau redirect("main:...") tidak sama
+    dengan name= di urls.py. Cek juga nama parameter (project_id).
+403 CSRF verification failed
+    Form POST lupa {% csrf_token %}. Di JS soal 4 header harus X-CSRFToken
+    dengan nilai dari input csrfmiddlewaretoken.
+405 Method Not Allowed
+    Normal untuk logout/delete/star lewat GET (itu yang diminta soal).
+    Kalau tidak diharapkan, form/fetch harus memakai method POST.
+403 Forbidden di soal 2
+    Benar bila user tidak punya Group yang sesuai. Pastikan seed_users.py
+    sudah dijalankan dan login memakai akun yang tepat.
+Static (css/js) tidak termuat
+    js-itemfinder: pastikan runserver (DEBUG=True) dan STATICFILES_DIRS ada.
+    Tekan Ctrl+F5 untuk menghapus cache.
+Favicon atau Google Fonts error di lab (jaringan terbatas)
+    Hapus baris <link> eksternal itu di HTML. Itu bukan bagian dari soal.
+Perubahan JS tidak terlihat
+    Ctrl+F5. Cek tab Console (F12) untuk error sintaks.
+AuthenticationForm: login selalu gagal
+    Pastikan user dibuat dengan create_user atau set_password, bukan
+    mengisi kolom password dengan teks biasa.
+PowerShell: Activate.ps1 diblokir
+    Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
+
+=====================================================================
+6. CHECKLIST 5 MENIT SEBELUM MENGERJAKAN
+=====================================================================
+[ ] Baca soal sampai habis, catat BATAS SCOPE (file mana yang boleh diubah)
+[ ] cd ke folder yang ada manage.py
+[ ] venv aktif, python-dotenv dan Django terpasang
+[ ] python manage.py check, migrate, lalu runserver tanpa error
+[ ] Seed akun (soal2, soal3) atau data (JS) sudah masuk
+[ ] Cari semua penanda TODO di file yang boleh diubah
+[ ] Kerjakan sesuai urutan di PANDUAN-URUTAN.md
+[ ] Tes manual di browser TIAP fungsi setelah selesai, jangan di akhir
+[ ] Tes tidak login, user biasa, Editor, Owner untuk soal 2
+[ ] Cek cookie di F12 > Application untuk soal 1 dan 3
+[ ] Jangan ubah route, settings, model, template di luar scope
