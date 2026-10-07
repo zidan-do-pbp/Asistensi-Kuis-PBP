@@ -8,6 +8,7 @@
   <form method="post" action="{% url 'main:logout' %}">{% csrf_token %}<button>Logout</button></form>
 {% else %}<a href="{% url 'main:login' %}">Login</a>{% endif %}
 
+{# TODO: (urutan 5A) create hanya untuk Owner. Variabel is_owner dikirim view project_list, BUKAN user.is_owner #}
 {% if is_owner %}
 <a id="create-control" href="{% url 'main:create_project' %}">Tambah Project</a>
 {% endif %}
@@ -25,6 +26,7 @@
   </form>
   {% endif %}
 
+  {# TODO: (urutan 5B) edit untuk Editor/Owner, delete hanya Owner. Ini hanya kosmetik, cek server di views.py tetap wajib #}
   {% if is_editor or is_owner %}
   <a class="edit-control" href="{% url 'main:edit_project' project.id %}">Edit</a>
   {% endif %}

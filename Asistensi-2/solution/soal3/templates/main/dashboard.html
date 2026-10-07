@@ -2,10 +2,12 @@
 <html lang="id">
 <head><meta charset="UTF-8"><title>Dashboard Preferensi</title></head>
 <body class="theme-{{ theme }}">
+{# TODO: (urutan 6, soal 4) sapaan "Halo, [username]!" dari request.user.username (di template: user.username) #}
 <h1>Halo, {{ user.username }}!</h1>
 <p id="visit-count">Dashboard telah dikunjungi {{ visit_count }} kali pada session ini.</p>
 <p id="theme-status">Tema aktif: {{ theme }}</p>
 
+{# TODO: (urutan 5) section #announcement hanya tampil jika announcement_dismissed False #}
 {% if not announcement_dismissed %}
 <section id="announcement">
   <p>Pengumpulan proyek ditutup Jumat pukul 21.00 WIB.</p>
