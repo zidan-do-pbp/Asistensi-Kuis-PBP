@@ -49,11 +49,11 @@ def create_project(request):
     return render(request, 'main/projects_form.html', {"form": form})
 
 def edit_project(request, project_id):
-    if not request.user.groups.filter(name__in=['Owner', 'Editor']).exist():
+    if not request.user.groups.filter(name__in=['Owner', 'Editor']).exists():
         return HttpResponseForbidden()
     project = get_object_or_404(Project, pk=project_id)
-    form = ProjectForm(request.POST or None)
+    form = ProjectForm(request.POST or None, instance=project)
     if request.method == 'POST' and form.is_valid():
         form.save()
         return redirect('main:project_list')
-    return render(request, 'main/project_form.html', {"form":form})
+    return render(request, 'main/projects_form.html', {"form":form})
