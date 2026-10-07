@@ -18,6 +18,8 @@ def home(request):
 # Import yang dipakai sudah ada di atas: login, logout, forms bawaan, HttpResponseNotAllowed, timezone
 
 
+# HUBUNGAN: urls.py path("register/", register, name="register") -> fungsi ini. Template main/register.html membaca konteks {{ form }}
+# HUBUNGAN: redirect("main:login") = app_name "main" + name "login" di urls.py (urls.py tidak diubah)
 # TODO: (urutan 1) register. Kontrak soal 1 poin 1
 def register(request):
     # TODO: (urutan 1a) POST: isi UserCreationForm dari request.POST
@@ -34,6 +36,7 @@ def register(request):
     return render(request, "main/register.html", {"form": form})
 
 
+# HUBUNGAN: urls.py name="login" -> fungsi ini. login.html membaca {{ form }}. Cookie last_login dibaca home() lewat request.COOKIES.get("last_login") lalu dikirim ke home.html sebagai {{ last_login }}
 # TODO: (urutan 2) login_user. Kontrak soal 1 poin 2
 def login_user(request):
     if request.method == "POST":
@@ -59,6 +62,7 @@ def login_user(request):
     return render(request, "main/login.html", {"form": form})
 
 
+# HUBUNGAN: tombol Logout di home.html adalah <form method="post"> + {% csrf_token %} ke {% url 'main:logout' %}; link GET harus 405, makanya cek POST di sini
 # TODO: (urutan 3) logout_user. Kontrak soal 1 poin 3
 def logout_user(request):
     # TODO: (urutan 3a) selain POST: HTTP 405 (kunci: "POST" pakai kutip, bandingkan dengan request.method)

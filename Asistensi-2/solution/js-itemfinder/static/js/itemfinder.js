@@ -22,6 +22,9 @@ let isLoading = false;
 let isSubmitting = false;
 
 
+// HUBUNGAN id elemen: report-list, search-input, status-filter, report-modal, report-form, form-message, load-message, refresh-button, close-modal ada di templates/itemfinder.html (id harus sama persis)
+// HUBUNGAN data: initial-reports (json_script di template), window.REPORTS_URL, #app data-list-url (-> main:reports_json) dan data-create-url (-> main:add_report_ajax)
+
 // SOAL 1
 //TODO: (urutan 1) renderReports(data). Ubah HANYA fungsi ini, belum perlu fetch
 function renderReports(data) {
@@ -100,6 +103,7 @@ function closeModal() {
 }
 
 // SOAL 3
+// HUBUNGAN: GET app.dataset.listUrl -> views.reports_json mengembalikan {"reports": [...]} -> dipakai sebagai data.reports
 //TODO: (urutan 3) loadReports() lalu listener tombol Muat ulang + pemanggilan pertama di init()
 async function loadReports() {
   const app = document.getElementById("app");
@@ -149,6 +153,7 @@ async function loadReports() {
 }
 
 // SOAL 4
+// HUBUNGAN: POST app.dataset.createUrl -> views.add_report_ajax (require_POST, baca JSON body, 201 sukses, 400 {"errors": {...}}). csrfmiddlewaretoken ada di dalam #report-form ({% csrf_token %})
 //TODO: (urutan 4) submitReport(event) lalu listener submit di init(). Jangan ubah fungsi soal 1 sampai 3
 async function submitReport(event) {
   const app = document.getElementById("app");

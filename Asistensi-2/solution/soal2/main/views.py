@@ -16,6 +16,7 @@ def is_editor(user):
 def is_owner(user):
     return has_role(user, "Owner")
 
+# HUBUNGAN: is_editor / is_owner di konteks ini = variabel yang dibaca project_list.html ({% if is_owner %}), BUKAN user.is_owner
 def project_list(request):
     projects = Project.objects.prefetch_related("starred_by").all()
     return render(
@@ -34,6 +35,7 @@ def project_list(request):
 # Urutan kerja views: create_project -> edit_project -> delete_project -> toggle_star
 
 
+# HUBUNGAN: urls.py "projects/create/" name="create_project" -> fungsi ini. Template project_form.html membaca {{ form }} dan {{ heading }}. Link-nya dipasang di project_list.html (urutan 5A) pakai {% url 'main:create_project' %}
 # TODO: (urutan 1) create_project. Hanya Owner, selain itu PermissionDenied (HTTP 403)
 @login_required
 def create_project(request):
@@ -55,6 +57,7 @@ def create_project(request):
     )
 
 
+# HUBUNGAN: urls.py "projects/<int:project_id>/edit/" -> parameter view WAJIB bernama project_id (sama persis). Di template: {% url 'main:edit_project' project.id %}
 # TODO: (urutan 2) edit_project. Hanya Editor atau Owner. User biasa 403
 @login_required
 def edit_project(request, project_id):
@@ -77,6 +80,7 @@ def edit_project(request, project_id):
     )
 
 
+# HUBUNGAN: urls.py "projects/<int:project_id>/delete/" -> project_id. Template: <form method="post"> + csrf_token ke {% url 'main:delete_project' project.id %}; link GET = 405 karena require_POST
 # TODO: (urutan 3) delete_project. Hanya POST (require_POST sudah ada) dan hanya Owner
 @login_required
 @require_POST
@@ -89,6 +93,7 @@ def delete_project(request, project_id):
     return redirect("main:project_list")
 
 
+# HUBUNGAN: urls.py "projects/<int:project_id>/star/" -> project_id. Model Project.starred_by (ManyToMany ke User) dihitung di template: {{ project.starred_by.count }}
 # TODO: (urutan 4) toggle_star. POST + login. Sudah ada di starred_by -> hapus, belum -> tambah
 # BONUS: prefetch_related("starred_by") sudah dipakai di project_list
 @login_required

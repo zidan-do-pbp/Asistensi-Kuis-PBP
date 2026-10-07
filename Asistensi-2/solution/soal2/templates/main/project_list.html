@@ -8,6 +8,7 @@
   <form method="post" action="{% url 'main:logout' %}">{% csrf_token %}<button>Logout</button></form>
 {% else %}<a href="{% url 'main:login' %}">Login</a>{% endif %}
 
+{# HUBUNGAN: is_owner/is_editor dikirim project_list() di views.py; nama url 'main:create_project' ada di urls.py #}
 {# TODO: (urutan 5A) create hanya untuk Owner. Variabel is_owner dikirim view project_list, BUKAN user.is_owner #}
 {% if is_owner %}
 <a id="create-control" href="{% url 'main:create_project' %}">Tambah Project</a>

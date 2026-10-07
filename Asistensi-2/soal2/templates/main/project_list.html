@@ -8,8 +8,11 @@
   <form method="post" action="{% url 'main:logout' %}">{% csrf_token %}<button>Logout</button></form>
 {% else %}<a href="{% url 'main:login' %}">Login</a>{% endif %}
 
-<!-- TODO 5A: tampilkan tombol create hanya bagi role Owner. -->
+{# HUBUNGAN: is_owner/is_editor dikirim project_list() di views.py; nama url 'main:create_project' ada di urls.py #}
+{# TODO: (urutan 5A) create hanya untuk Owner. Variabel is_owner dikirim view project_list, BUKAN user.is_owner #}
+{% if is_owner %}
 <a id="create-control" href="{% url 'main:create_project' %}">Tambah Project</a>
+{% endif %}
 
 {% for project in projects %}
 <article>
@@ -24,11 +27,15 @@
   </form>
   {% endif %}
 
-  <!-- TODO 5B: edit hanya bagi Editor/Owner; delete hanya bagi Owner. -->
+  {# TODO: (urutan 5B) edit untuk Editor/Owner, delete hanya Owner. Ini hanya kosmetik, cek server di views.py tetap wajib #}
+  {% if is_editor or is_owner %}
   <a class="edit-control" href="{% url 'main:edit_project' project.id %}">Edit</a>
+  {% endif %}
+  {% if is_owner %}
   <form class="delete-control" method="post" action="{% url 'main:delete_project' project.id %}">
     {% csrf_token %}<button type="submit">Delete</button>
   </form>
+  {% endif %}
 </article>
 {% empty %}<p>Belum ada project.</p>{% endfor %}
 </body>

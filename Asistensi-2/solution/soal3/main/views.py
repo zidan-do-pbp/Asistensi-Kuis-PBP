@@ -9,6 +9,7 @@ from django.views.decorators.http import require_POST
 # Session = data di server (visit_count, theme). Cookie = data di browser (announcement_dismissed)
 
 
+# HUBUNGAN: konteks visit_count, theme, announcement_dismissed dibaca dashboard.html ({{ visit_count }}, class theme-{{ theme }}, {% if not announcement_dismissed %}). Nama key HARUS sama
 # TODO: (urutan 1) dashboard. login_required sudah ada. Soal 4 ikut selesai di sini (decorator + sapaan di template)
 # SOAL 4: login_url diambil dari LOGIN_URL = "main:login" di settings.py, jadi @login_required tanpa argumen sudah cukup
 @login_required
@@ -31,6 +32,7 @@ def dashboard(request):
     )
 
 
+# HUBUNGAN: dashboard.html mengirim <button name="theme" value="light|dark"> -> dibaca request.POST.get("theme"). Nilai di session dibaca lagi oleh dashboard()
 # TODO: (urutan 2) set_theme. POST saja, hanya "light" atau "dark", selain itu HTTP 400 tanpa mengubah session
 @login_required
 @require_POST
@@ -43,6 +45,7 @@ def set_theme(request):
     return redirect("main:dashboard")
 
 
+# HUBUNGAN: cookie announcement_dismissed ditulis di sini, dibaca dashboard() (request.COOKIES), dipakai template untuk menyembunyikan #announcement. Form tombolnya: {% url 'main:dismiss_announcement' %}
 # TODO: (urutan 3) dismiss_announcement. Buat response redirect DULU, baru set_cookie
 @login_required
 @require_POST
@@ -59,6 +62,7 @@ def dismiss_announcement(request):
     return response
 
 
+# HUBUNGAN: yang dihapus (theme, visit_count, cookie) adalah key yang sama dengan yang dibaca dashboard(). Form tombolnya: {% url 'main:reset_preferences' %}
 # TODO: (urutan 4) reset_preferences. DILARANG session.flush() karena user harus tetap login
 @login_required
 @require_POST

@@ -2,6 +2,7 @@
 <html lang="id">
 <head><meta charset="UTF-8"><title>Dashboard Preferensi</title></head>
 <body class="theme-{{ theme }}">
+{# HUBUNGAN: user otomatis ada di template berkat context processor auth, tidak perlu dikirim dari view #}
 {# TODO: (urutan 6, soal 4) sapaan "Halo, [username]!" dari request.user.username (di template: user.username) #}
 <h1>Halo, {{ user.username }}!</h1>
 <p id="visit-count">Dashboard telah dikunjungi {{ visit_count }} kali pada session ini.</p>
