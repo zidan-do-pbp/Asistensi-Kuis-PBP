@@ -30,3 +30,4 @@
 2026-10-07 07:02 | Claude | A2.2 | EXPLAIN | next: user paham redirect merujuk nama route (name= di urls.py) bukan nama function. User lanjut perbaiki 5 bug views.py, tambah route create_project, buat template form
 2026-10-07 07:06 | Claude | A2.2 | EXPLAIN | next: user baru sadar redirect('main:x') merujuk nama route di urls.py (app_name:name=), dikoreksi: bukan nama function. User lanjut perbaiki 5 bug views + tambah route create_project
 2026-10-07 07:06 | Claude | A2.2 | REVIEW | next: views.py user benar semua (5 bug nama beres, dibaca dari paste, belum dijalankan). Langkah: template projects_form.html dengan csrf_token, lalu tes browser owner1 (200, simpan) dan editor1 (403)
+2026-10-07 07:10 | Claude | A2.2 | RUN-OK | next: owner1 simpan project berhasil (screenshot: 3x test - a di /projects/), tapi ada bullet kosong di antara tiap baris (kemungkinan template projects.html). Minta user paste projects.html. Tes editor1 403 belum dilaporkan
