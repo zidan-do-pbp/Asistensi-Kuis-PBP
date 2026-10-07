@@ -11,3 +11,4 @@
 2026-10-07 08:16 | Claude | D1-D4,J1-J4 | RUN-OK | next: file kuis sekarang langsung di latihan (user minta, aturan lama user-commit dicabut untuk file kuis). NEXT ACTION D1.1 register
 2026-10-07 08:18 | Claude | DOC | RUN-OK | next: urls.py 4 soal + js views.py + itemfinder.html diberi komentar HUBUNGAN, tes lulus. NEXT ACTION D1.1 register
 2026-10-07 08:21 | Claude | READINESS | RUN-OK | next: e2e jsdom 20 PASS terhadap server Django asli, tes Django 4 proyek OK, CHECKLIST-HARI-KUIS.md ditambah. Bahan ~95%, kesiapan user belum diukur (Paham 0/20, Latihan 0/20). NEXT ACTION D1.1 register
+2026-10-07 08:27 | Claude | REFERENSI | RUN-OK | next: REFERENSI-KUIS2.txt dibuat (12 bagian, 1200+ baris; kode jawaban diambil dari file asli, JS node --check OK, variasi login_required/user_passes_test/permission_required diuji). User minta kode langsung, bukan drill. NEXT ACTION D1.1 register (tunggu user)
