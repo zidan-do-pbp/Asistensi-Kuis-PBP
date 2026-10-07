@@ -24,7 +24,7 @@
    - Latihan = `[x]` hanya jika user menulis kodenya dari kosong (tanpa melihat jawaban) dan user mem-paste kode ke chat untuk direview AI. Kesalahan sintaks kecil boleh.
    - "Saya sudah paham" dari user saja BUKAN bukti. Pakai `[~]`.
    - Setiap perubahan status wajib ada bukti 1 kalimat di kolom Catatan atau Session Log.
-7. AI tidak bisa push ke GitHub dan tidak bisa melihat repo/laptop user kecuali user paste. Jangan klaim sudah memverifikasi.
+7. AI tidak bisa melihat laptop user kecuali user paste atau screenshot. Jangan klaim sudah memverifikasi. Pengecualian: kalau user memberi izin dan token dan sesi punya akses bash, AI boleh clone branch `latihan` dan menjalankan F6 (log) sendiri. Kode user tetap user yang commit (lihat rule 13).
 8. Log (Section 6 dan 7) bersifat append-only. Jangan hapus entri lama.
 9. HANDOFF (merge berkala, bukan satu-satunya penyimpanan): saat user bilang "handoff", "simpan", "limit", "ganti AI", atau setelah selesai sekitar 3-5 item, atau kalau percakapan sudah panjang, AI proaktif mengingatkan lalu mengeluarkan:
    (a) FULL isi StudyPlan.md terbaru dalam SATU code block (Section 2, 3, 6, 7 diupdate dari ProgressLog; Section 0, 0B, 1, 4, 5, 8 tidak diubah), dan
@@ -32,6 +32,14 @@
 10. Jangan ubah struktur/heading file ini supaya AI lain tetap bisa parse.
 11. READ SCOPE (hemat token, WAJIB): ikuti 0B "Read scope". Jangan fetch zip, folder, atau seluruh repo. Cari TODO di TODO-INDEX.md, fetch HANYA file yang berisi TODO yang diminta user.
 12. COMMIT LOG (WAJIB): SETIAP balasan AI diakhiri blok F6 (0B). Tujuan: kalau AI kena limit mendadak, progress sudah ada di GitHub. Tidak ada balasan tanpa F6, termasuk balasan penjelasan saja.
+13. ATURAN USER (koreksi sesi 2026-10-07, WAJIB, mengalahkan kebiasaan default AI):
+    a. Cek ProgressLog.md dan state di Section 2 SEBELUM menyuruh apa pun. Jangan menyuruh ulang setup (env, venv, folder) yang sudah tercatat jalan. Jangan kirim perintah berisi placeholder seperti `<venv>`. Pakai path nyata.
+    b. Zydan pemula total soal syntax Django. DILARANG menyuruh menebak syntax yang belum diajarkan. Urutan: jelaskan tujuan, tunjukkan kode lengkap (Before/After), jelaskan per baris, baru user mengetik sendiri.
+    c. DILARANG pertanyaan recall/kuis/tebakan. Status Paham tetap `[~]` tanpa recall, dicatat jujur. Alasan konsep hanya ditanyakan kalau user sendiri yang mulai.
+    d. SEMUA file kode Django (models, views, urls, forms, template) ditulis user sendiri di editor, AI hanya memandu lewat F1/F3. DILARANG menulis file kode lewat perintah PowerShell. Terminal hanya untuk menjalankan (migrate, runserver, shell, git).
+    e. Label folder di tiap perintah harus sama dengan folder aktual user (baca dari prompt yang ia paste). Satu label salah = path salah.
+    f. Log (F6) dijalankan AI sendiri dan di-push SEBELUM membalas, supaya `git pull --rebase` user sudah mencakup. Kode user: user yang commit, AI kirim terminal (git add path spesifik, commit, `git pull --rebase --autostash origin latihan`, `git push origin HEAD`).
+    g. Raw link GitHub bisa stale (cache). Kalau bash dan token ada, clone branch `latihan` dan baca dari clone.
 
 ---
 
@@ -53,8 +61,14 @@ Zydan = Fasilkom UI student. Cannot validate Django/JS code alone. Often forgets
 9. "Done / works / safe" only after a check. Say what was checked (command run, output pasted).
 10. Active recall: never put the answer next to the question. Grade honestly. Diagnose the weak concept, log it in Section 6.
 11. Avoid: delve, leverage, robust, seamless, comprehensive, crucial, utilize, streamline.
+12. Mulai jawaban dengan satu kalimat TUJUAN (kenapa langkah ini ada), baru kode. Jangan langsung perintah.
+13. Tidak ada pertanyaan tebakan atau recall (Section 0 rule 13c). Kalau perlu cek paham, ajarkan lalu minta user menjalankan dan paste hasilnya.
+14. User menulis semua kode Django sendiri di editor. AI tidak menulis file lewat terminal (rule 13d).
+15. Nama di Django case-sensitive dan harus persis: `ProjectForm` bukan `Projectform`, `.exists()` bukan `.exist()`. `redirect('main:x')` merujuk `name=` di urls.py, BUKAN nama function.
 
 ### Mode: GUIDED-ATTEMPT (default)
+
+Override sesi 2026-10-07: untuk syntax yang belum pernah diajarkan, AI mengajarkan kode lengkap dulu (tujuan, kode, penjelasan per baris), user mengetik dan menjalankan. Item yang diajarkan langsung = Latihan `[~]` paling tinggi. Tebakan baru diminta untuk pola yang sudah pernah dilihat user.
 
 Per TODO, loop in this order. One step per turn. Wait for Zydan's "ok"/output before the next step.
 
@@ -206,13 +220,14 @@ Run `manage.py` commands from the folder that contains `manage.py`. Check: `Test
 
 ## 2. STATE SAAT INI (AI: update tiap handoff)
 
-- Terakhir diupdate: 2026-10-07 oleh Claude (handoff setelah A1.1-A1.3 selesai)
-- Total sesi belajar: 1
-- Progres Paham: 3/46 | Progres Latihan: 1/37
-- Fokus sekarang: A1 (register/login/logout) jalan di project `quiz2-latihan`. A1.1-A1.3 selesai. A1.4 (cookie flags detail, P2) belum disentuh.
-- NEXT ACTION: lanjut A2.0 (Django shell, buat user + assign Group), prasyarat buat A2.1-A2.6 (role-based permission di project create/edit/delete). A1.4 bisa disisipkan kapan saja (P2, bukan blocking).
-- Jalur belajar P1 yang disarankan (sisa): A2.0 -> A2.2 -> A2.3 -> A2.4 -> A2.6 -> B1.1 -> B1.2 -> B2.1 -> B2.4 -> B2.5 -> B3.1 -> B3.2 -> B4.1 -> B4.2 -> B4.3 -> A4.1 (A4.1 ditunda karena butuh app dashboard terpisah dari project auth yang sudah ada, bisa digabung nanti)
-- Catatan kondisi user: pemula total soal Django, butuh breakdown granular tiap baris kode (bukan skeleton isi-titik, tapi 1 baris per giliran kalau stuck). Sering ketuker `{'key': val}` (dict) vs `{'key', val}` (set), sudah 2x kejadian (A1.1, A1.2), perlu diingatkan preventif tiap render context baru. Pola bug lain yang berulang: manggil ulang nama function sendiri alih-alih import Django bawaan (A1.2 logout_user/login_user ketuker).
+- Terakhir diupdate: 2026-10-07 oleh Claude (sesi 2: A2.0-A2.2 jalan terverifikasi, kode A2.3 sudah diajarkan)
+- Total sesi belajar: 2
+- Progres Paham: 3/46 | Progres Latihan: 1/37 (A2.0-A2.2 belum dihitung `[x]`: kode diajarkan langsung, Paham tanpa recall)
+- Fokus sekarang: A2.3 `edit_project` (views.py + urls.py). Berhenti di sini dulu atas permintaan user.
+- NEXT ACTION: user menulis `edit_project` di `main/views.py` (import `get_object_or_404`) dan path `projects/<int:project_id>/edit/` bernama `edit_project` di `main/urls.py`, lalu AI kirim perintah commit. Sesudahnya: tombol Edit di `projects.html`, tes owner1 dan editor1 (boleh) dan akun tanpa role (403), lalu A2.4 `delete_project` (POST only, Owner only), A2.6 tombol per role + csrf_token.
+- Jalur belajar P1 sisa: A2.3 -> A2.4 -> A2.6 -> B1.1 -> B1.2 -> B2.1 -> B2.4 -> B2.5 -> B3.1 -> B3.2 -> B4.1 -> B4.2 -> B4.3 -> A4.1
+- Fakta project (jangan tanya ulang): project Django ada di `Asistensi-1\quiz2-latihan\` (`manage.py`, venv `env\` di folder yang sama, project `quiz2_demo`, app `main`). Aktifkan: `.\env\Scripts\Activate.ps1` dari `quiz2-latihan`, prompt `(env)`. Akun tes (sudah dibuat lewat shell): `owner1`/`owner12345` (Group Owner), `editor1`/`editor12345` (Group Editor). Template: `projects.html`, `projects_form.html`. Route name: `login`, `register`, `logout`, `project_list`, `create_project`, `edit_project` (belum). Login diubah redirect ke `main:create_project`. Model `Project`: name, description, starred_by (M2M User). Cek role pakai `request.user.groups.filter(name=...).exists()`.
+- Catatan kondisi user: pemula total soal Django, butuh penjelasan tujuan dulu dan kode lengkap, BUKAN tebakan (user marah kalau disuruh menebak syntax, 2026-10-07). Menolak pertanyaan recall. Sering ketuker `{'key': val}` (dict) vs `{'key', val}` (set). Sering salah nama (case, huruf s, nama route vs function). Aturan lengkap di Section 0 rule 13.
 
 ---
 
@@ -228,10 +243,10 @@ Kolom: P = prioritas (P1 dikonfirmasi dosen/inti, P2 penting, P3 bonus). Node = 
 | A1.2 | P1 | login: AuthenticationForm, login(), set_cookie (`fn:login_user`) | [x] | [~] | 2026-10-07 | Paham: jelasin alasan data= keyword + get_user ambil bukan query baru, 2 recall benar. Latihan: H3, 2 bug attempt (login_user manggil dirinya sendiri bukan Django login, dict vs set). Verified browser: POST login sukses (302). |
 | A1.3 | P2 | logout: POST only 405, logout(), delete_cookie (`fn:logout_user`) | [x] | [x] | 2026-10-07 | Latihan: ditulis dari kosong, 1 bug logic (lupa panggil logout()) dikoreksi sendiri setelah ditunjuk. Paham: jelasin alasan GET berbahaya (trigger pasif) pakai kata sendiri. Verified browser: GET /logout/ -> 405 (manual test, screenshot). |
 | A1.4 | P2 | cookie last_login, flags max_age/httponly/samesite, no secrets (`concept:cookie_flags`, `rule:no_secrets_in_cookie`) | [ ] | [ ] | - | Belum disentuh. Cookie value masih placeholder string, bukan timestamp asli (format `[AMB]` di notes, perlu diisi + 3 flag bonus). |
-| A2.0 | P1 | Django shell: buat user + assign Group (`tip:lab_prep_a2`, `concept:role_group`) | [ ] | [ ] | - | NEXT ACTION. |
-| A2.1 | P1 | Role = Group, tanpa superuser (`concept:role_group`, `rule:no_superuser`) | [ ] | - | - | |
-| A2.2 | P1 | create_project: Owner only, else 403 (`fn:create_project`) | [ ] | [ ] | - | |
-| A2.3 | P1 | edit_project: cek permission DULU, lalu get_object_or_404 (`fn:edit_project`) | [ ] | [ ] | - | |
+| A2.0 | P1 | Django shell: buat user + assign Group (`tip:lab_prep_a2`, `concept:role_group`) | [~] | [~] | 2026-10-07 | Kode diajarkan langsung (H3, user belum pernah lihat syntax). Verified di shell: owner1 di Group Owner, editor1 di Group Editor (`user.groups.all()`). Alasan no_superuser dijawab separuh, tanpa recall. |
+| A2.1 | P1 | Role = Group, tanpa superuser (`concept:role_group`, `rule:no_superuser`) | [~] | - | 2026-10-07 | Dijelaskan AI. Jawaban user: superuser = admin yang bisa bikin user (separuh benar). Belum lewat syarat recall. |
+| A2.2 | P1 | create_project: Owner only, else 403 (`fn:create_project`) | [~] | [~] | 2026-10-07 | Kode diajarkan langsung. User menulis ulang di editor dan memperbaiki 5 bug nama. Verified browser: owner1 simpan form (data tampil), non-Owner kena 403 (screenshot). Model Project, ProjectForm, projects.html, projects_form.html dibuat sebagai scaffold. Commit 41bce26 dan 3647f72. |
+| A2.3 | P1 | edit_project: cek permission DULU, lalu get_object_or_404 (`fn:edit_project`) | [ ] | [ ] | - | Kode dan penjelasan sudah diberikan (name__in Owner/Editor, get_object_or_404 pk=project_id, instance=project). User belum menulis/menjalankan. NEXT ACTION. |
 | A2.4 | P1 | delete_project: POST only + Owner only (`fn:delete_project`) | [ ] | [ ] | - | |
 | A2.5 | P2 | toggle_star: POST + login, add/remove starred_by (`fn:toggle_star`) | [ ] | [ ] | - | |
 | A2.6 | P1 | template project_list: tombol per role + csrf_token + server-side check (`tmpl:project_list`, `rule:server_side_check`, `rule:post_csrf`) | [ ] | [ ] | - | |
@@ -329,6 +344,10 @@ Kolom: P = prioritas (P1 dikonfirmasi dosen/inti, P2 penting, P3 bonus). Node = 
 | 2026-10-07 | A1.2 | Salah urutan argumen `AuthenticationForm(request.POST)` vs `AuthenticationForm(data=request.POST)`, belum tau kenapa harus keyword `data=` | fixed setelah dijelasin positional arg request vs data |
 | 2026-10-07 | A1.2 | `login_user(request, form.get_user())` manggil dirinya sendiri (rekursif) alih-alih Django `login()`, TypeError di traceback asli saat browser test | fixed |
 | 2026-10-07 | - | Sempat salah struktur project: `django-admin startproject quiz2_demo` tanpa titik (`.`) bikin manage.py nested 2x dan folder ganda tabrakan, harus di-reset total (`Remove-Item -Recurse`) dan redo dengan titik | fixed |
+| 2026-10-07 | A2.2 | Nama tidak persis: `Projectform` (harus `ProjectForm`), `.exist()` (harus `.exists()`), `redirect('main:projects_list')` dan `'main:projects_form'` (route sebenarnya `project_list` dan `create_project`) | fixed (dikoreksi di review) |
+| 2026-10-07 | A2.2 | Kira `redirect('main:create_project')` merujuk nama function, padahal merujuk `name=` di `path(...)` urls.py | fixed (dijelaskan 3 peran: alamat, function, name=) |
+| 2026-10-07 | A2.2 | Template `projects.html`: penutup `<li>` ditulis `<li>` (harus `</li>`), bikin bullet kosong | fixed |
+| 2026-10-07 | A2.0 | Ketik `Owner` polos di shell (NameError): belum paham Group dibuat lewat `Group.objects.create(...)`, bukan mengetik nama | fixed (diajarkan langsung) |
 
 ---
 
@@ -340,6 +359,8 @@ Format: `YYYY-MM-DD | AI (nama/model) | aktivitas | item disentuh + perubahan st
 - 2026-10-06 | Claude | tambah Section 0B (style + format output + cheatsheet run) | tidak ada | mulai A4.1
 - 2026-10-06 | Claude | tambah Read scope, F6 commit log, ProgressLog.md, branch layout, checklist S1-S3; koreksi hitungan Latihan 29 -> 23 (+14 baris S = 37) | tidak ada | bersihkan repo, buat branch latihan, mulai A4.1
 - 2026-10-07 | Claude | sesi pertama: setup project `quiz2-latihan` dari nol (venv, startproject, startapp, INSTALLED_APPS, migrate), sempat ada struktur ganda (startproject tanpa titik) direset ulang; kerjakan A1.1 (register), A1.2 (login_user), A1.3 (logout_user) sampai verified browser; user tolak permintaan pakai personal access token GitHub di chat untuk commit/push (ditolak konsisten, alasan keamanan credential leak), AI tetap hanya menulis command, user yang menjalankan | A1.1 Paham [x] Latihan [~], A1.2 Paham [x] Latihan [~], A1.3 Paham [x] Latihan [x] | handoff, lanjut A2.0
+
+- 2026-10-07 | Claude | sesi 2: A2.0 (shell: Group Owner/Editor, owner1/editor1), scaffold Project model + ProjectForm + projects.html + projects_form.html, A2.2 create_project (Owner only, 403 terverifikasi browser); AI clone branch latihan dan push log sendiri atas izin user (token scoped repo, disarankan revoke), kode user tetap user yang commit; user menolak tebakan, recall, dan file kode ditulis via terminal, aturan dicatat di Section 0 rule 13; kode A2.3 diajarkan | A2.0 Paham [~] Latihan [~], A2.1 Paham [~], A2.2 Paham [~] Latihan [~], A2.3 belum | user tulis edit_project + path edit, commit, lanjut A2.3 tes
 
 ### 7B. ProgressLog.md (file terpisah, append-only, ditulis lewat F6)
 

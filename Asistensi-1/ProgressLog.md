@@ -38,3 +38,4 @@
 2026-10-07 07:14 | Claude | A2.2 | REVIEW | next: user stage perbaikan main/urls.py (slash akhir). Commit+push, lalu lapor tes editor1 403 (belum)
 2026-10-07 07:14 | Claude | A2.2 | RUN-OK | next: push urls.py slash terverifikasi (3647f72). A2.2 Latihan max [~] (kode H3), tes editor1 403 BELUM ada bukti, lalu A2.3 edit_project
 2026-10-07 07:16 | Claude | A2.2 | RUN-OK | next: 403 terverifikasi di /projects/create/ (screenshot, user akun editor1 menurut user). A2.2 Latihan [~] (H3), Paham [~] (user menolak recall). Lanjut A2.3 edit_project: cek Owner/Editor dulu, baru get_object_or_404; route projects/<int:project_id>/edit/
+2026-10-07 07:25 | Claude | - | HANDOFF-MERGED | next: StudyPlan diupdate (Section 0 rule 13, 0B style 12-15, Section 2/3/6/7). User tulis edit_project di views.py + path edit di urls.py, lalu commit
