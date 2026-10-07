@@ -251,3 +251,12 @@ function init() {
 }
 
 init();
+
+// VARIAN dari transkrip asistensi (bukan jawaban utama; teks soal kuis yang menang). Semuanya sama-sama benar, pilih salah satu:
+// - submitReport sukses: transkrip menambah laporan baru di depan array lalu render, tanpa fetch ulang:
+//     reports = [data.report, ...reports]; renderReports(applyFilters());
+//   (jawaban di atas memanggil await loadReports() agar data selalu dari server)
+// - submitReport gagal: transkrip menyimpan label tombol dulu (const originalLabel = submitButton.textContent) lalu mengembalikannya di finally
+// - response error: transkrip membaca JSON dengan fallback aman: await response.json().catch(() => ({}))
+// - error 400: key "__all__" = pesan umum tanpa prefix, key lain diberi prefix nama field, lalu digabung dengan join
+// - catch: if (error instanceof TypeError) -> tampilkan pesan jaringan umum, selain itu tampilkan error.message
