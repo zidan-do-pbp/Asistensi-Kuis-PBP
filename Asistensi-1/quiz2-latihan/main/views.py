@@ -57,3 +57,12 @@ def edit_project(request, project_id):
         form.save()
         return redirect('main:project_list')
     return render(request, 'main/projects_form.html', {"form":form})
+
+def delete_project(request, project_id):
+    if request.method != 'POST':
+        return HttpResponseNotAllowed(['POST'])
+    if not request.user.groups.filter(name = "Owner").exists():
+        return HttpResponseForbidden()
+    project = get_object_or_404(Project, pk=project_id)
+    project.delete()
+    return redirect('main:project_list')
