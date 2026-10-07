@@ -47,6 +47,7 @@ function renderReports(data) {
     badge.className = isLost ? "badge badge-hilang" : "badge badge-ditemukan";
     badge.textContent = isLost ? "Hilang" : "Ditemukan";
 
+    //TRAP: pakai textContent untuk data laporan, bukan innerHTML (XSS)
     const title = document.createElement("h3");
     title.textContent = report.title;
 
@@ -79,6 +80,7 @@ function applyFilters() {
 
   return reports.filter((report) => {
     const matchTitle = report.title.toLowerCase().includes(keyword);
+    //TRAP: bandingkan dengan ===, bukan == atau =
     const matchStatus = status === "all" || report.status === status;
     return matchTitle && matchStatus;
   });
@@ -205,6 +207,7 @@ async function submitReport(event) {
 
     //TODO: (urutan 4g) sukses: kosongkan form, tutup modal, perbarui daftar. Gagal (catch): modal tetap terbuka, isi form dipertahankan
     form.reset();
+    //TRAP: isSubmitting harus false SEBELUM closeModal(), kalau tidak modal tidak pernah menutup
     isSubmitting = false;
     closeModal();
     await loadReports();
@@ -225,6 +228,7 @@ function init() {
   //TODO: (urutan 2d, soal 2) listener pencarian (input), filter status (change), tombol buka dan tutup modal
   searchInput.addEventListener("input", () => renderReports(applyFilters()));
   statusFilter.addEventListener("change", () => renderReports(applyFilters()));
+  //TRAP: handler tanpa kurung (openModal, bukan openModal()), kalau tidak langsung jalan saat dipasang
   openButton.addEventListener("click", openModal);
   closeButton.addEventListener("click", closeModal);
   //TODO: (urutan 3g, soal 3) listener tombol Muat ulang data, lalu muat data sekali saat init

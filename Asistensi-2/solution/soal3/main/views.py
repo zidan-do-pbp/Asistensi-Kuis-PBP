@@ -10,6 +10,7 @@ from django.views.decorators.http import require_POST
 
 
 # TODO: (urutan 1) dashboard. login_required sudah ada. Soal 4 ikut selesai di sini (decorator + sapaan di template)
+# SOAL 4: login_url diambil dari LOGIN_URL = "main:login" di settings.py, jadi @login_required tanpa argumen sudah cukup
 @login_required
 def dashboard(request):
     # TODO: (urutan 1a) visit_count dari session default 0, tambah 1, SIMPAN kembali ke session
