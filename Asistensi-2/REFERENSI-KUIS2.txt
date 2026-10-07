@@ -1,0 +1,1241 @@
+REFERENSI-KUIS2.txt | Kamus lengkap Kuis 2 PBP (Django auth + JavaScript)
+Dipakai SAAT KUIS: template diberikan, tinggal setup environment (Windows) lalu isi bagian TODO.
+Tanda  [SUMBER]  = ada di soal/transkrip.  [TAMBAHAN]  = bukan dari soal, disiapkan untuk jaga-jaga.
+Teks soal kuis selalu menang kalau berbeda dengan file ini.
+
+DAFTAR ISI
+  1. PETA CEPAT: soal apa mengubah file apa
+  2. TERMINAL (setup environment Windows PowerShell)
+  3. TABEL manage.py
+  4. TABEL urls.py  (cara menulis path(...), parameter, name)
+  5. TABEL views.py (import, request, response, status, decorator, form, session, cookie)
+  6. TEMPLATE (HTML): tag Django + kode template per soal
+  7. KODE JAWABAN views.py + urls.py per soal (Django 1 sampai 4)
+  8. TABEL JavaScript (DOM, event, fetch) + KODE JAWABAN itemfinder.js
+  9. models.py, forms.py, settings.py yang relevan
+ 10. KODE TAMBAHAN: variasi yang mungkin keluar
+ 11. TABEL ERROR: pesan -> penyebab -> perbaikan
+ 12. CHECKLIST
+
+
+========================================================================
+1. PETA CEPAT
+========================================================================
+
+| Soal | Folder | File yang boleh diubah | Yang dikerjakan |
+|------|--------|------------------------|-----------------|
+| Django 1 | soal1 | main/views.py | register, login_user (cookie last_login), logout_user |
+| Django 2 | soal2 | main/views.py, templates/main/project_list.html | create/edit/delete_project, toggle_star, tombol per role |
+| Django 3 | soal3 | main/views.py, templates/main/dashboard.html | dashboard (session+cookie), set_theme, dismiss_announcement, reset_preferences |
+| Django 4 | soal3 | main/views.py, templates/main/dashboard.html | @login_required + "Halo, [username]!" |
+| JS 1 | js-itemfinder | static/js/itemfinder.js | renderReports(data) |
+| JS 2 | idem | idem | applyFilters, openModal, closeModal, listener di init() |
+| JS 3 | idem | idem | loadReports (fetch GET) |
+| JS 4 | idem | idem | submitReport (fetch POST + CSRF) |
+
+Aturan emas: urls.py, settings.py, models.py JANGAN diubah kecuali soal bilang boleh.
+Jadi kamu cukup MEMBACA urls.py untuk tahu nama yang harus dipakai di views dan template.
+
+Cara tahu nama dari template yang diberikan (SANGAT PENTING):
+  - Cari  {% url 'main:XXX' %}  di template  -> XXX harus ada sebagai name="XXX" di urls.py
+  - Cari  redirect("main:XXX")   di views     -> sama
+  - Cari  {{ NAMA }}  dan  {% if NAMA %}  di template -> NAMA harus dikirim view lewat dict konteks render()
+  - Cari  getElementById("xxx")  di JS -> id="xxx" harus ada di HTML
+
+
+========================================================================
+2. TERMINAL (Windows PowerShell)
+========================================================================
+
+TERMINAL: setup environment (jalankan dari folder yang ada manage.py)
+
+```
+cd C:\path\ke\template\soal1             # ganti soal1/soal2/soal3/js-itemfinder
+dir                                          # harus ada manage.py
+python --version
+python -m venv env                           # buat venv (sekali)
+.\env\Scripts\Activate.ps1                  # aktifkan. Prompt jadi (env)
+pip install "django~=5.2" python-dotenv      # soal1, soal2, soal3 (python-dotenv WAJIB)
+pip install "django>=5.2,<5.3"               # js-itemfinder
+python manage.py check
+python manage.py migrate
+python manage.py runserver                   # buka http://127.0.0.1:8000/
+```
+
+Kalau PowerShell menolak Activate.ps1:
+```
+Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
+.\env\Scripts\Activate.ps1
+```
+
+Alternatif: pip install -r requirements.txt  (lebih lambat, ada gunicorn/psycopg2, boleh dilewati)
+
+TERMINAL: persiapan data per soal
+
+```
+# soal2 (setelah migrate)
+python manage.py loaddata projects
+python manage.py shell -c "exec(open('seed_users.py').read())"
+# akun: regular / editor / owner, password aaaaa   (kalau seed_users.py tidak ada, pakai blok shell di bawah)
+
+# soal3
+python manage.py shell -c "exec(open('seed_user.py').read())"
+
+# js-itemfinder (data contoh)
+python manage.py shell
+```
+
+SHELL: buat user dan group manual (paste satu per satu di python manage.py shell)
+```
+from django.contrib.auth.models import User, Group
+User.objects.create_user("regular", password="aaaaa")
+e = User.objects.create_user("editor", password="aaaaa")
+o = User.objects.create_user("owner", password="aaaaa")
+e.groups.add(Group.objects.get(name="Editor"))
+o.groups.add(Group.objects.get(name="Owner"))
+exit()
+```
+
+SHELL: data contoh js-itemfinder
+```
+from main.models import Report
+Report.objects.create(title="Dompet hitam", location="Kantin", status="hilang")
+Report.objects.create(title="Kunci motor", location="Perpustakaan", status="ditemukan")
+exit()
+```
+
+TERMINAL: kalau internet lab dibatasi (siapkan di rumah, simpan di flashdisk)
+```
+pip download "django~=5.2" python-dotenv -d wheels
+pip install --no-index --find-links wheels "django~=5.2" python-dotenv
+```
+
+TERMINAL: port terpakai / matikan server
+```
+python manage.py runserver 8080
+netstat -ano | findstr :8000
+taskkill /PID <nomor> /F
+```
+Hentikan server: Ctrl+C. Keluar shell: exit() atau Ctrl+Z lalu Enter.
+
+TERMINAL: uji tanpa browser
+```
+python manage.py test                    # kalau tests.py ada
+curl.exe -i http://127.0.0.1:8000/reports/data/
+```
+(Lengkap: RUN-COMMANDS.txt dan SHELL-COPYPASTE.txt di folder solution)
+
+
+========================================================================
+3. TABEL manage.py
+========================================================================
+
+| Command | Fungsi | Kapan dipakai di kuis |
+|---------|--------|-----------------------|
+| python manage.py runserver | jalankan server di :8000 | tiap uji. Ctrl+C untuk berhenti |
+| python manage.py runserver 8080 | ganti port | "port already in use" |
+| python manage.py check | cek konfigurasi tanpa jalan | sebelum mulai, setelah edit urls |
+| python manage.py migrate | buat/terapkan tabel database | WAJIB pertama kali, kalau tidak "no such table" |
+| python manage.py makemigrations | buat file migrasi dari perubahan models.py | hanya kalau soal mengubah model (biasanya tidak) |
+| python manage.py showmigrations | lihat migrasi sudah jalan atau belum ([X]) | cek tabel sudah ada |
+| python manage.py loaddata projects | isi data dari fixture | soal2 |
+| python manage.py dumpdata main --indent 2 | ekspor data | cek isi data |
+| python manage.py shell | konsol Python dengan Django | buat user/group/data |
+| python manage.py shell -c "..." | satu perintah tanpa masuk shell | seed cepat |
+| python manage.py createsuperuser | buat admin (untuk /admin/ saja) | bukan untuk hak akses fitur |
+| python manage.py changepassword <user> | ganti password | lupa password akun tes |
+| python manage.py flush | kosongkan semua data | reset (hati-hati) |
+| python manage.py clearsessions | hapus session kedaluwarsa | jarang |
+| python manage.py startapp <nama> | buat app baru | tidak perlu (template sudah ada) |
+| python manage.py test | jalankan tes | kalau ada tests.py |
+| python manage.py help <cmd> | bantuan | lupa opsi |
+Reset database SQLite total: Remove-Item db.sqlite3 lalu python manage.py migrate
+
+
+========================================================================
+4. TABEL urls.py
+========================================================================
+
+4.1 ANATOMI path(...)  (ini yang sering membingungkan)
+
+```
+path("<alamat>", <nama_fungsi_view>, name="<nama_url>"),
+```
+
+| Bagian | Isi | Aturan | Contoh |
+|--------|-----|--------|--------|
+| "<alamat>" | URL yang diketik di browser (setelah domain) | string, tanpa "/" di depan, biasanya diakhiri "/", root = "" | "register/" -> http://127.0.0.1:8000/register/ |
+| <nama_fungsi_view> | fungsi di main/views.py yang dijalankan | TANPA tanda kurung. Harus di-import di atas file. Nama persis sama dengan def di views.py | register |
+| name="<nama_url>" | label untuk menyebut URL ini dari kode lain | bebas, tapi PAKAI YANG SAMA dengan yang dipanggil template/redirect. Konvensi: sama dengan nama fungsi | name="register" |
+
+Cara memakai name:
+```
+Python  : redirect("main:register")            # "main" = app_name, "register" = name
+Template: {% url 'main:register' %}            # tanpa parameter
+Template: {% url 'main:edit_project' project.id %}   # dengan parameter
+```
+
+4.2 app_name
+```
+app_name = "main"      # di main/urls.py. Itu yang membuat awalan "main:" wajib dipakai
+```
+Kalau lupa app_name, {% url 'main:xxx' %} -> NoReverseMatch ("'main' is not a registered namespace").
+
+4.3 IMPORT di urls.py (harus sama dengan nama fungsi di views.py)
+```
+from django.urls import path
+from main.views import home, register, login_user, logout_user
+```
+atau  `from . import views`  lalu  `path("register/", views.register, name="register")`.
+
+4.4 PARAMETER di URL (path converter)
+
+| Converter | Menangkap | Contoh | Tipe di view |
+|-----------|-----------|--------|--------------|
+| <int:project_id> | angka bulat >= 0 | projects/3/edit/ | int 3 |
+| <str:nama> | teks tanpa "/" | user/budi/ | "budi" |
+| <slug:slug> | huruf-angka-strip | post/hello-world/ | "hello-world" |
+| <uuid:id> | UUID | item/<uuid>/ | UUID |
+| <path:p> | teks termasuk "/" | files/a/b.txt | "a/b.txt" |
+
+ATURAN PARAMETER: nama setelah titik dua di urls.py HARUS SAMA PERSIS dengan nama parameter fungsi.
+```
+path("projects/<int:project_id>/edit/", edit_project, name="edit_project"),
+def edit_project(request, project_id):       # project_id sama persis
+```
+Salah ketik (project_ud, id vs project_id) -> TypeError: got an unexpected keyword argument.
+
+4.5 TEMPLATE JAWABAN: urls.py per soal (cukup dibaca, jangan diubah)
+
+soal1
+```
+app_name = "main"
+urlpatterns = [
+    path("", home, name="home"),
+    path("register/", register, name="register"),
+    path("login/", login_user, name="login"),
+    path("logout/", logout_user, name="logout"),
+]
+```
+soal2
+```
+from django.contrib.auth import views as auth_views
+app_name = "main"
+urlpatterns = [
+    path("", project_list, name="project_list"),
+    path("login/", auth_views.LoginView.as_view(template_name="main/login.html"), name="login"),
+    path("logout/", auth_views.LogoutView.as_view(next_page="main:project_list"), name="logout"),
+    path("projects/create/", create_project, name="create_project"),
+    path("projects/<int:project_id>/edit/", edit_project, name="edit_project"),
+    path("projects/<int:project_id>/delete/", delete_project, name="delete_project"),
+    path("projects/<int:project_id>/star/", toggle_star, name="toggle_star"),
+]
+```
+soal3
+```
+app_name = "main"
+urlpatterns = [
+    path("", dashboard, name="dashboard"),
+    path("login/", auth_views.LoginView.as_view(template_name="main/login.html"), name="login"),
+    path("logout/", auth_views.LogoutView.as_view(next_page="main:login"), name="logout"),
+    path("preferences/theme/", set_theme, name="set_theme"),
+    path("announcement/dismiss/", dismiss_announcement, name="dismiss_announcement"),
+    path("preferences/reset/", reset_preferences, name="reset_preferences"),
+]
+```
+js-itemfinder
+```
+app_name = "main"
+urlpatterns = [
+    path("", show_itemfinder, name="show_itemfinder"),
+    path("reports/data/", reports_json, name="reports_json"),
+    path("reports/add/", add_report_ajax, name="add_report_ajax"),
+]
+```
+project urls.py (quiz2_xxx/urls.py, jangan diubah): path('', include('main.urls')) = semua URL main dipasang di root.
+
+4.6 [TAMBAHAN] kalau kamu HARUS menambah route baru (tidak ada di template)
+Langkah: (1) tulis fungsi di views.py, (2) tambah ke import di urls.py, (3) tambah baris path(...), (4) panggil dari template pakai {% url %}.
+```
+# views.py
+def about(request):
+    return render(request, "main/about.html")
+# urls.py
+from main.views import about
+path("about/", about, name="about"),
+# template
+<a href="{% url 'main:about' %}">Tentang</a>
+```
+Route dengan parameter + nama bebas:
+```
+path("projects/<int:project_id>/", project_detail, name="project_detail"),
+def project_detail(request, project_id): ...
+{% url 'main:project_detail' project.id %}
+```
+Class-based view bawaan: path("login/", auth_views.LoginView.as_view(template_name="main/login.html"), name="login")
+
+
+========================================================================
+5. TABEL views.py
+========================================================================
+
+5.1 IMPORT yang dipakai (salin sesuai kebutuhan)
+
+| Import | Dipakai untuk |
+|--------|---------------|
+| from django.shortcuts import render, redirect, get_object_or_404 | render template, redirect, ambil objek atau 404 |
+| from django.contrib.auth import login, logout, authenticate | proses sesi login/logout |
+| from django.contrib.auth.forms import UserCreationForm, AuthenticationForm | form register dan login bawaan |
+| from django.contrib.auth.decorators import login_required | batasi view untuk user yang sudah login |
+| from django.contrib.auth.models import User, Group | model user dan role |
+| from django.core.exceptions import PermissionDenied | raise -> HTTP 403 |
+| from django.http import HttpResponseNotAllowed, HttpResponseBadRequest, HttpResponseForbidden, JsonResponse, Http404 | respons manual |
+| from django.views.decorators.http import require_POST, require_GET, require_http_methods | batasi method (selain itu 405) |
+| from django.utils import timezone | waktu (timezone.localtime()) |
+| from django.contrib import messages | pesan flash (tambahan) |
+| from main.forms import ProjectForm / from main.models import Project | form dan model aplikasi |
+
+5.2 REQUEST (apa yang bisa dibaca dari request)
+
+| Ekspresi | Isi |
+|----------|-----|
+| request.method | "GET" atau "POST" (HURUF BESAR, pakai kutip) |
+| request.POST | data form (dict-like). request.POST.get("theme") |
+| request.GET | query string ?a=1 |
+| request.user | user login. .username, .is_authenticated, .groups |
+| request.session | dict di server: session["k"], .get("k", default), .pop("k", None) |
+| request.COOKIES | dict cookie dari browser: request.COOKIES.get("last_login") |
+| request.body | isi mentah (bytes). JSON: json.loads(request.body) |
+| request.FILES | upload file (jarang) |
+
+5.3 RESPONSE dan STATUS CODE
+
+| Situasi | Kode | Cara |
+|---------|------|------|
+| Sukses tampil halaman | 200 | return render(request, "main/x.html", {...}) |
+| Sukses lalu pindah halaman | 302 | return redirect("main:nama") |
+| Request salah / nilai tidak valid | 400 | return HttpResponseBadRequest("pesan") |
+| Belum login | 302 ke LOGIN_URL?next=... | @login_required |
+| Login tapi tidak berhak | 403 | raise PermissionDenied  (atau return HttpResponseForbidden()) |
+| Objek tidak ada | 404 | get_object_or_404(Model, pk=id)  (atau raise Http404) |
+| Method salah | 405 | @require_POST  atau  return HttpResponseNotAllowed(["POST"]) |
+| JSON | 200/201/400 | JsonResponse({...}, status=201) |
+| CSRF salah/hilang | 403 | lupa {% csrf_token %} atau header X-CSRFToken |
+
+5.4 POLA FORM (GET/POST) -- pola yang dipakai register, create, edit
+```
+def nama_view(request):
+    if request.method == "POST":
+        form = NamaForm(request.POST)                  # edit: NamaForm(request.POST, instance=obj)
+        if form.is_valid():
+            form.save()
+            return redirect("main:tujuan")
+    else:
+        form = NamaForm()                              # edit: NamaForm(instance=obj)
+    return render(request, "main/template.html", {"form": form})
+```
+Jatuh ke render = POST tidak valid (form + error tampil) dan GET (form kosong).
+
+5.5 SESSION vs COOKIE
+
+| | Session | Cookie |
+|---|---------|--------|
+| Disimpan di | server (browser hanya pegang sessionid) | browser |
+| Baca | request.session.get("theme", "light") | request.COOKIES.get("announcement_dismissed") |
+| Tulis | request.session["theme"] = "dark" | response.set_cookie("nama", "nilai", max_age=..., httponly=True, samesite="Lax") |
+| Hapus | request.session.pop("theme", None) | response.delete_cookie("nama") |
+| Catatan | JANGAN session.flush() kalau user harus tetap login | set_cookie dipanggil pada response yang DI-RETURN (buat redirect dulu) |
+
+Argumen set_cookie: key, value, max_age (detik; 3600 = 1 jam; 604800 = 7 hari), httponly=True (JS tidak bisa baca), samesite="Lax", secure=True (hanya HTTPS, tidak perlu di lokal), path="/".
+
+5.6 PERMISSION / ROLE
+```
+def has_role(user, role_name):
+    return user.groups.filter(name=role_name).exists()
+if not has_role(request.user, "Owner"):
+    raise PermissionDenied
+```
+Larangan di kuis: is_superuser untuk hak akses. Cek role SELALU di view (server). Menyembunyikan tombol di template hanya kosmetik.
+
+5.7 DECORATOR (urutan: dari atas, @login_required paling luar)
+```
+@login_required                 # belum login -> redirect LOGIN_URL?next=
+@require_POST                   # bukan POST -> 405
+def nama(request, project_id): ...
+```
+
+5.8 MANY-TO-MANY (star)
+```
+project.starred_by.add(user)         # tambah
+project.starred_by.remove(user)      # hapus
+project.starred_by.filter(pk=user.pk).exists()   # sudah ada?
+project.starred_by.count()           # jumlah
+Project.objects.prefetch_related("starred_by")   # bonus: kurangi query
+```
+
+5.9 TABEL kontrak view per soal (apa yang dikembalikan)
+
+| View | Method | Syarat | Sukses | Gagal |
+|------|--------|--------|--------|-------|
+| register | GET/POST | - | GET form kosong; POST valid -> save + redirect main:login | POST invalid: render form+error, tanpa user baru |
+| login_user | GET/POST | - | POST valid: login(), redirect main:home, cookie last_login | invalid: render ulang |
+| logout_user | POST saja | - | logout(), delete_cookie, redirect main:home | GET -> 405 |
+| create_project | GET/POST | Owner | POST valid -> save, redirect main:project_list | bukan Owner -> 403 |
+| edit_project | GET/POST | Owner/Editor | instance=project, save, redirect | tanpa role 403; id tak ada 404 |
+| delete_project | POST saja | Owner | delete, redirect | bukan Owner 403; GET 405 |
+| toggle_star | POST saja | login | toggle starred_by, redirect | belum login redirect login; GET 405 |
+| dashboard | GET | login | session visit_count+1, theme, cookie announcement_dismissed | belum login redirect login |
+| set_theme | POST saja | login | "light"/"dark" ke session, redirect | lain -> 400 |
+| dismiss_announcement | POST saja | login | cookie "1" 604800 httponly Lax | - |
+| reset_preferences | POST saja | login | pop theme+visit_count, delete_cookie, user tetap login | - |
+
+
+========================================================================
+6. TEMPLATE (HTML)
+========================================================================
+
+6.1 TAG DJANGO TEMPLATE
+
+| Tulisan | Arti |
+|---------|------|
+| {{ nama }} | tampilkan variabel dari konteks render() |
+| {{ user.username }} | user otomatis tersedia di semua template (tidak perlu dikirim view) |
+| {{ project.starred_by.count }} | akses atribut/method tanpa () |
+| {{ nilai|default:"teks" }} | filter: nilai cadangan |
+| {% if is_owner %}...{% elif x %}...{% else %}...{% endif %} | kondisi |
+| {% if not a %} / {% if a and b %} / {% if a or b %} | operator |
+| {% for p in projects %}...{% empty %}kosong{% endfor %} | perulangan |
+| {% url 'main:nama' %} / {% url 'main:nama' obj.id %} | bikin URL dari name di urls.py |
+| {% csrf_token %} | WAJIB di setiap <form method="post"> |
+| {% load static %} lalu {% static 'js/file.js' %} | file statis |
+| {{ data|json_script:"id-elemen" }} | tanam data Python jadi JSON di HTML (dibaca JS) |
+| {# komentar #} | komentar template |
+| {{ form.as_p }} | render form bawaan |
+| {{ form.errors }} / {{ form.field.errors }} | pesan error form |
+| user in project.starred_by.all | cek keanggotaan |
+
+6.2 SATU FORM POST (pola yang sama dipakai logout, delete, star, theme, dismiss, reset)
+```
+<form method="post" action="{% url 'main:NAMA_URL' %}">
+  {% csrf_token %}
+  <button type="submit">Teks Tombol</button>
+</form>
+```
+Dengan kirim nilai: <button type="submit" name="theme" value="dark">Dark</button>  -> dibaca request.POST.get("theme")
+Dengan id objek: action="{% url 'main:delete_project' project.id %}"
+
+6.3 TEMPLATE JAWABAN: project_list.html (soal 2, bagian yang dikerjakan)
+```
+{% if is_owner %}
+<a id="create-control" href="{% url 'main:create_project' %}">Tambah Project</a>
+{% endif %}
+...
+  {% if is_editor or is_owner %}
+  <a class="edit-control" href="{% url 'main:edit_project' project.id %}">Edit</a>
+  {% endif %}
+  {% if is_owner %}
+  <form class="delete-control" method="post" action="{% url 'main:delete_project' project.id %}">
+    {% csrf_token %}<button type="submit">Delete</button>
+  </form>
+  {% endif %}
+```
+CATATAN: is_owner / is_editor adalah variabel KONTEKS dari view project_list (BUKAN user.is_owner).
+
+6.4 TEMPLATE JAWABAN: dashboard.html (soal 3 + 4)
+```
+<h1>Halo, {{ user.username }}!</h1>
+<p id="visit-count">Dashboard telah dikunjungi {{ visit_count }} kali pada session ini.</p>
+<p id="theme-status">Tema aktif: {{ theme }}</p>
+
+{% if not announcement_dismissed %}
+<section id="announcement">
+  <p>Pengumpulan proyek ditutup Jumat pukul 21.00 WIB.</p>
+  <form method="post" action="{% url 'main:dismiss_announcement' %}">
+    {% csrf_token %}<button type="submit">Tutup Pengumuman</button>
+  </form>
+</section>
+{% endif %}
+
+<form method="post" action="{% url 'main:set_theme' %}">
+  {% csrf_token %}
+  <button type="submit" name="theme" value="light">Tema Light</button>
+  <button type="submit" name="theme" value="dark">Tema Dark</button>
+</form>
+```
+
+6.5 TEMPLATE lain (sudah ada di template kuis, untuk dibaca)
+register.html
+```
+<form method="post">{% csrf_token %}{{ form.as_p }}<button type="submit">Buat Akun</button></form>
+```
+home.html: {{ last_login|default:"Belum tersedia" }} menampilkan cookie last_login yang dikirim view home().
+
+6.6 HTML untuk JS (templates/itemfinder.html) -- atribut yang dibaca JS
+```
+<script> window.REPORTS_URL = "{% url 'main:reports_json' %}";</script>
+<script src="{% static 'js/itemfinder.js' %}" defer></script>
+<main id="app" data-list-url="{% url 'main:reports_json' %}" data-create-url="{% url 'main:add_report_ajax' %}">
+<form id="report-form" novalidate>{% csrf_token %} ... </form>
+{{ initial_reports|json_script:"initial-reports" }}
+```
+data-list-url di HTML = app.dataset.listUrl di JS (kebab-case jadi camelCase).
+
+
+========================================================================
+7. KODE JAWABAN Django (views.py lengkap)
+========================================================================
+
+TEMPLATE: soal1/main/views.py
+
+```
+from django.contrib.auth import login, logout
+from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
+from django.http import HttpResponseNotAllowed
+from django.shortcuts import redirect, render
+from django.utils import timezone
+
+def home(request):
+    return render(
+        request,
+        "main/home.html",
+        {"last_login": request.COOKIES.get("last_login")},
+    )
+
+def register(request):
+    if request.method == "POST":
+        form = UserCreationForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect("main:login")
+        # POST tidak valid: tidak ada User dibuat, jatuh ke render di bawah (form + error)
+    else:
+        form = UserCreationForm()
+    return render(request, "main/register.html", {"form": form})
+
+def login_user(request):
+    if request.method == "POST":
+        form = AuthenticationForm(request, data=request.POST)
+        if form.is_valid():
+            login(request, form.get_user())
+            response = redirect("main:home")
+            # BONUS: max_age=3600, httponly=True, samesite="Lax"
+            response.set_cookie(
+                "last_login",
+                timezone.localtime().strftime("%Y-%m-%d %H:%M:%S"),
+                max_age=3600,
+                httponly=True,
+                samesite="Lax",
+            )
+            return response
+    else:
+        form = AuthenticationForm()
+    return render(request, "main/login.html", {"form": form})
+
+def logout_user(request):
+    if request.method != "POST":
+        return HttpResponseNotAllowed(["POST"])
+    logout(request)
+    response = redirect("main:home")
+    response.delete_cookie("last_login")
+    return response
+```
+
+TEMPLATE: soal2/main/views.py
+
+```
+from django.contrib.auth.decorators import login_required
+from django.core.exceptions import PermissionDenied
+from django.shortcuts import get_object_or_404, redirect, render
+from django.views.decorators.http import require_POST
+
+from main.forms import ProjectForm
+from main.models import Project
+
+def has_role(user, role_name):
+    return user.groups.filter(name=role_name).exists()
+
+def is_editor(user):
+    return has_role(user, "Editor")
+
+def is_owner(user):
+    return has_role(user, "Owner")
+
+def project_list(request):
+    projects = Project.objects.prefetch_related("starred_by").all()
+    return render(
+        request,
+        "main/project_list.html",
+        {
+            "projects": projects,
+            "is_editor": has_role(request.user, "Editor"),
+            "is_owner": has_role(request.user, "Owner"),
+        },
+    )
+
+@login_required
+def create_project(request):
+    if not is_owner(request.user):
+        raise PermissionDenied
+    if request.method == "POST":
+        form = ProjectForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect("main:project_list")
+    else:
+        form = ProjectForm()
+    return render(
+        request,
+        "main/project_form.html",
+        {"form": form, "heading": "Tambah Project"},
+    )
+
+@login_required
+def edit_project(request, project_id):
+    if not (is_owner(request.user) or is_editor(request.user)):
+        raise PermissionDenied
+    project = get_object_or_404(Project, pk=project_id)
+    if request.method == "POST":
+        form = ProjectForm(request.POST, instance=project)
+        if form.is_valid():
+            form.save()
+            return redirect("main:project_list")
+    else:
+        form = ProjectForm(instance=project)
+    return render(
+        request,
+        "main/project_form.html",
+        {"form": form, "heading": "Edit Project"},
+    )
+
+@login_required
+@require_POST
+def delete_project(request, project_id):
+    if not is_owner(request.user):
+        raise PermissionDenied
+    project = get_object_or_404(Project, pk=project_id)
+    project.delete()
+    return redirect("main:project_list")
+
+# BONUS: prefetch_related("starred_by") sudah dipakai di project_list
+@login_required
+@require_POST
+def toggle_star(request, project_id):
+    project = get_object_or_404(Project, pk=project_id)
+    if project.starred_by.filter(pk=request.user.pk).exists():
+        project.starred_by.remove(request.user)
+    else:
+        project.starred_by.add(request.user)
+    return redirect("main:project_list")
+```
+
+TEMPLATE: soal3/main/views.py (soal 3 dan 4)
+
+```
+from django.contrib.auth.decorators import login_required
+from django.http import HttpResponseBadRequest
+from django.shortcuts import redirect, render
+from django.views.decorators.http import require_POST
+
+# SOAL 4: login_url diambil dari LOGIN_URL = "main:login" di settings.py, jadi @login_required tanpa argumen sudah cukup
+@login_required
+def dashboard(request):
+    visit_count = request.session.get("visit_count", 0) + 1
+    request.session["visit_count"] = visit_count
+    theme = request.session.get("theme", "light")
+    announcement_dismissed = request.COOKIES.get("announcement_dismissed") == "1"
+    return render(
+        request,
+        "main/dashboard.html",
+        {
+            "visit_count": visit_count,
+            "theme": theme,
+            "announcement_dismissed": announcement_dismissed,
+        },
+    )
+
+@login_required
+@require_POST
+def set_theme(request):
+    theme = request.POST.get("theme")
+    if theme not in ("light", "dark"):
+        return HttpResponseBadRequest("Tema tidak valid")
+    request.session["theme"] = theme
+    return redirect("main:dashboard")
+
+@login_required
+@require_POST
+def dismiss_announcement(request):
+    response = redirect("main:dashboard")
+    response.set_cookie(
+        "announcement_dismissed",
+        "1",
+        max_age=604800,
+        httponly=True,
+        samesite="Lax",
+    )
+    return response
+
+@login_required
+@require_POST
+def reset_preferences(request):
+    request.session.pop("theme", None)
+    request.session.pop("visit_count", None)
+    response = redirect("main:dashboard")
+    response.delete_cookie("announcement_dismissed")
+    return response
+```
+
+Penjelasan baris-baris yang sering membingungkan:
+  response = redirect("main:home")      # buat respons dulu
+  response.set_cookie(...)              # lalu tempelkan cookie ke respons itu
+  return response                       # baru dikembalikan
+  AuthenticationForm(request, data=request.POST)   # AuthenticationForm WAJIB menerima request di argumen pertama
+  login(request, form.get_user())       # form.get_user() = objek user yang lolos autentikasi
+  timezone.localtime().strftime("%Y-%m-%d %H:%M:%S")   # format cookie last_login
+  get_object_or_404(Project, pk=project_id)            # pk = primary key = id
+  request.session.get("visit_count", 0) + 1            # default 0 kalau belum ada
+  request.COOKIES.get("announcement_dismissed") == "1" # True hanya jika persis "1"
+  theme not in ("light", "dark")                        # validasi nilai
+
+
+========================================================================
+8. TABEL JavaScript
+========================================================================
+
+8.1 DOM (mengambil dan mengubah elemen)
+
+| Kode | Fungsi |
+|------|--------|
+| document.getElementById("id") | ambil elemen dari id |
+| el.value | isi input/select |
+| el.textContent = "teks" | isi teks AMAN (cegah XSS). Pakai ini untuk data dari user |
+| el.innerHTML = "" | kosongkan isi (aman untuk string kosong). JANGAN isi dengan data user |
+| document.createElement("article") | buat elemen baru (di memori) |
+| el.classList.add("card") / el.className = "a b" | beri class |
+| parent.appendChild(el) / parent.append(a, b) | tempel ke halaman |
+| el.hidden = true/false | sembunyi/tampil |
+| el.disabled = true/false | nonaktifkan tombol |
+| el.dataset.listUrl | baca atribut data-list-url |
+| form.elements["title"].value | baca field form dari name="title" |
+| form.reset() | kosongkan form |
+| modal.showModal() / modal.close() | buka/tutup <dialog> |
+| input.focus() | fokus ke input |
+
+8.2 EVENT
+| Kode | Catatan |
+|------|---------|
+| el.addEventListener("click", openModal) | TANPA kurung. openModal() = langsung jalan |
+| el.addEventListener("input", fn) | tiap ketik (search) |
+| el.addEventListener("change", fn) | tiap pilihan select berubah |
+| form.addEventListener("submit", submitReport) | submit (bukan click): jalan juga saat Enter |
+| event.preventDefault() | cegah reload form |
+| () => renderReports(applyFilters()) | arrow function pembungkus (handler yang butuh argumen) |
+
+8.3 ARRAY
+| Kode | Fungsi |
+|------|--------|
+| data.forEach((r) => {...}) | loop |
+| reports.filter((r) => kondisi) | saring, kembalikan array baru |
+| data.length | jumlah |
+| str.trim().toLowerCase() | rapikan teks |
+| str.includes(kata) | mengandung |
+| Array.isArray(x) | cek array |
+| [data.report, ...reports] | tambah di depan |
+| === | sama nilai DAN tipe (jangan = atau ==) |
+
+8.4 FETCH (pola dasar)
+GET
+```
+try {
+  const response = await fetch(url, { headers: { Accept: "application/json" } });
+  if (!response.ok) throw new Error(`HTTP ${response.status}`);   // cek SEBELUM .json()
+  const data = await response.json();
+} catch (error) { ... } finally { ... }
+```
+POST JSON + CSRF
+```
+const response = await fetch(url, {
+  method: "POST",
+  headers: { "Content-Type": "application/json", "X-CSRFToken": csrfToken },
+  body: JSON.stringify({ title, location, status }),
+});
+```
+CSRF token dari form: form.elements["csrfmiddlewaretoken"].value
+await hanya boleh di dalam async function.
+
+8.5 POLA GUARD
+```
+if (isLoading || isSubmitting) { return; }     # cegah request ganda
+isLoading = true; ... try { } catch { } finally { isLoading = false; }
+```
+
+TEMPLATE: static/js/itemfinder.js (jawaban lengkap)
+
+
+```
+const list = document.getElementById("report-list");
+const searchInput = document.getElementById("search-input");
+const statusFilter = document.getElementById("status-filter");
+const modal = document.getElementById("report-modal");
+const form = document.getElementById("report-form");
+const formMessage = document.getElementById("form-message");
+const loadMessage = document.getElementById("load-message");
+const refreshButton = document.getElementById("refresh-button");
+const closeButton = document.getElementById("close-modal");
+const BASE_REPORTS_ENDPOINT = window.REPORTS_URL;
+
+let reports = JSON.parse(
+  document.getElementById("initial-reports").textContent
+);
+
+let isLoading = false;
+let isSubmitting = false;
+
+// SOAL 1
+function renderReports(data) {
+  const resultCount = document.getElementById("result-count");
+  const emptyMessage = document.getElementById("empty-message");
+
+  list.innerHTML = "";
+
+  let hilang = 0;
+  let ditemukan = 0;
+
+  data.forEach((report) => {
+    const card = document.createElement("article");
+    card.classList.add("card");
+
+    const badge = document.createElement("span");
+    const isLost = report.status === "hilang";
+    badge.className = isLost ? "badge badge-hilang" : "badge badge-ditemukan";
+    badge.textContent = isLost ? "Hilang" : "Ditemukan";
+
+    //TRAP: pakai textContent untuk data laporan, bukan innerHTML (XSS)
+    const title = document.createElement("h3");
+    title.textContent = report.title;
+
+    const location = document.createElement("p");
+    location.textContent = report.location;
+
+    card.append(badge, title, location);
+    list.appendChild(card);
+
+    if (isLost) {
+      hilang += 1;
+    } else {
+      ditemukan += 1;
+    }
+  });
+
+  //BONUS soal 1: rincian jumlah status, misal "3 laporan (2 hilang, 1 ditemukan)"
+  resultCount.textContent =
+    `${data.length} laporan (${hilang} hilang, ${ditemukan} ditemukan)`;
+  emptyMessage.hidden = data.length !== 0;
+}
+
+// SOAL 2
+function applyFilters() {
+  const keyword = searchInput.value.trim().toLowerCase();
+  const status = statusFilter.value;
+
+  return reports.filter((report) => {
+    const matchTitle = report.title.toLowerCase().includes(keyword);
+    //TRAP: bandingkan dengan ===, bukan == atau =
+    const matchStatus = status === "all" || report.status === status;
+    return matchTitle && matchStatus;
+  });
+}
+
+function openModal() {
+  formMessage.textContent = "";
+  modal.showModal();
+  //BONUS soal 2: fokus ke input judul
+  form.elements["title"].focus();
+}
+
+function closeModal() {
+  if (isSubmitting) {
+    return;
+  }
+  modal.close();
+}
+
+// SOAL 3
+async function loadReports() {
+  const app = document.getElementById("app");
+  const openButton = document.getElementById("open-modal");
+
+  if (isLoading || isSubmitting) {
+    return;
+  }
+
+  isLoading = true;
+  loadMessage.textContent = "Memuat data...";
+  refreshButton.disabled = true;
+  openButton.disabled = true;
+
+  try {
+    const response = await fetch(app.dataset.listUrl, {
+      headers: { Accept: "application/json" },
+    });
+
+    if (!response.ok) {
+      throw new Error(`HTTP ${response.status}`);
+    }
+
+    const data = await response.json();
+
+    //BONUS soal 3: pastikan data.reports array sebelum menimpa data lama
+    if (!Array.isArray(data.reports)) {
+      throw new Error("Format data tidak valid");
+    }
+
+    reports = data.reports;
+    renderReports(applyFilters());
+    loadMessage.textContent = "";
+  } catch (error) {
+    loadMessage.textContent = "Gagal memuat data. Coba lagi.";
+  } finally {
+    isLoading = false;
+    refreshButton.disabled = false;
+    openButton.disabled = false;
+  }
+}
+
+// SOAL 4
+async function submitReport(event) {
+  const app = document.getElementById("app");
+  const submitButton = document.getElementById("submit-button");
+
+  event.preventDefault();
+
+  if (isSubmitting || isLoading) {
+    return;
+  }
+
+  const title = form.elements["title"].value.trim();
+  const location = form.elements["location"].value.trim();
+  const status = form.elements["status"].value;
+
+  if (!title || !location || !["hilang", "ditemukan"].includes(status)) {
+    formMessage.textContent =
+      "Judul dan lokasi wajib diisi, status harus hilang atau ditemukan.";
+    return;
+  }
+
+  const csrfToken = form.elements["csrfmiddlewaretoken"].value;
+
+  isSubmitting = true;
+  formMessage.textContent = "";
+  submitButton.disabled = true;
+  submitButton.textContent = "Mengirim...";
+
+  try {
+    const response = await fetch(app.dataset.createUrl, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "X-CSRFToken": csrfToken,
+      },
+      body: JSON.stringify({ title, location, status }),
+    });
+
+    if (!response.ok) {
+      let message = "Gagal menyimpan laporan. Coba lagi.";
+      //BONUS soal 4: HTTP 400 tampilkan pesan dari data.errors
+      if (response.status === 400) {
+        const data = await response.json();
+        const details = Object.values(data.errors || {}).flat();
+        if (details.length > 0) {
+          message = details.join(" ");
+        }
+      }
+      throw new Error(message);
+    }
+
+    await response.json();
+
+    form.reset();
+    //TRAP: isSubmitting harus false SEBELUM closeModal(), kalau tidak modal tidak pernah menutup
+    isSubmitting = false;
+    closeModal();
+    await loadReports();
+  } catch (error) {
+    formMessage.textContent = error.message;
+  } finally {
+    isSubmitting = false;
+    submitButton.disabled = false;
+    submitButton.textContent = "Simpan";
+  }
+}
+
+// EVENT HANDLER
+function init() {
+  const openButton = document.getElementById("open-modal");
+
+  searchInput.addEventListener("input", () => renderReports(applyFilters()));
+  statusFilter.addEventListener("change", () => renderReports(applyFilters()));
+  //TRAP: handler tanpa kurung (openModal, bukan openModal()), kalau tidak langsung jalan saat dipasang
+  openButton.addEventListener("click", openModal);
+  closeButton.addEventListener("click", closeModal);
+  refreshButton.addEventListener("click", loadReports);
+  form.addEventListener("submit", submitReport);
+
+  renderReports(applyFilters());
+  loadReports();
+}
+
+init();
+```
+
+
+Format data dari server:
+  GET  /reports/data/  -> {"reports": [{"id":1,"title":"..","location":"..","status":"hilang"}, ...]}
+  POST /reports/add/   -> 201 {"report": {...}}   |  400 {"errors": {"title": ["pesan"]}}
+  views backend: add_report_ajax membaca json.loads(request.body) lalu ReportForm.
+
+Varian dari transkrip (pilih salah satu, sama-sama benar):
+  sukses submit tanpa fetch ulang:  reports = [data.report, ...reports]; renderReports(applyFilters());
+  baca error aman:                  const data = await response.json().catch(() => ({}));
+  catch jaringan:                   if (error instanceof TypeError) { pesan jaringan } else { error.message }
+  simpan label tombol:              const originalLabel = submitButton.textContent; ... finally { submitButton.textContent = originalLabel; }
+
+
+========================================================================
+9. models.py, forms.py, settings.py yang relevan
+========================================================================
+
+TEMPLATE: soal2/main/models.py
+```
+class Project(models.Model):
+    title = models.CharField(max_length=150)
+    description = models.TextField()
+    starred_by = models.ManyToManyField(User, blank=True, related_name="starred_projects")
+```
+TEMPLATE: soal2/main/forms.py
+```
+class ProjectForm(ModelForm):
+    class Meta:
+        model = Project
+        fields = ["title", "description"]
+```
+TEMPLATE: js-itemfinder/main/models.py + forms.py
+```
+class Report(models.Model):
+    STATUS_CHOICES = [("hilang", "Hilang"), ("ditemukan", "Ditemukan")]
+    title = models.CharField(max_length=80)
+    location = models.CharField(max_length=80)
+    status = models.CharField(max_length=10, choices=STATUS_CHOICES)
+class ReportForm(forms.ModelForm):
+    class Meta:
+        model = Report
+        fields = ["title", "location", "status"]
+```
+settings.py yang sering dibaca (jangan diubah):
+```
+LOGIN_URL = 'main:login'      # tujuan redirect @login_required. Makanya @login_required tanpa argumen sudah cukup
+ROOT_URLCONF = 'quiz2_xxx.urls'
+STATIC_URL = 'static/'
+STATICFILES_DIRS = [BASE_DIR / "static"]    # js-itemfinder
+```
+Group "Owner" dan "Editor" dibuat oleh migrasi (migrate), jadi jalankan migrate dulu.
+
+
+========================================================================
+10. KODE TAMBAHAN [TAMBAHAN]: variasi yang mungkin keluar
+========================================================================
+
+Nama-nama di sini bukan dari soal. Tujuannya: kalau soal minta bentuk lain, pola kodenya sudah dikenal.
+
+10.1 login_required dengan tujuan eksplisit
+```
+@login_required(login_url="main:login")           # nama route
+@login_required(login_url="/login/")              # path
+```
+Setelah login, Django kembali ke ?next= otomatis kalau memakai LoginView bawaan.
+
+10.2 Batasi dengan fungsi cek (user_passes_test)
+```
+from django.contrib.auth.decorators import user_passes_test
+def is_owner(user): return user.groups.filter(name="Owner").exists()
+@user_passes_test(is_owner)                       # gagal -> redirect ke LOGIN_URL
+def owner_only(request): ...
+```
+Kalau ingin 403 (bukan redirect), cek manual lalu raise PermissionDenied.
+
+10.3 permission_required (izin model Django)
+```
+from django.contrib.auth.decorators import permission_required
+@permission_required("main.add_project", raise_exception=True)    # tanpa izin -> 403
+def create_project(request): ...
+```
+
+10.4 Batasi satu method
+```
+from django.views.decorators.http import require_http_methods
+@require_http_methods(["GET", "POST"])
+```
+
+10.5 Role lain di view (contoh Moderator)
+```
+if not (has_role(request.user, "Owner") or has_role(request.user, "Moderator")):
+    raise PermissionDenied
+```
+
+10.6 Cookie lain (nama dan umur berbeda)
+```
+response.set_cookie("nama_cookie", "nilai", max_age=86400, httponly=True, samesite="Lax")   # 1 hari
+response.delete_cookie("nama_cookie")
+```
+
+10.7 Session counter pola lain
+```
+request.session["counter"] = request.session.get("counter", 0) + 1
+request.session.modified = True      # hanya perlu kalau mengubah isi list/dict di dalam session
+```
+
+10.8 View JSON baru (untuk AJAX)
+```
+import json
+from django.http import JsonResponse
+from django.views.decorators.http import require_GET, require_POST
+
+@require_GET
+def items_json(request):
+    return JsonResponse({"items": list(Item.objects.values("id", "title"))})
+
+@require_POST
+def add_item_ajax(request):
+    try:
+        payload = json.loads(request.body)
+    except (json.JSONDecodeError, UnicodeDecodeError):
+        return JsonResponse({"errors": {"__all__": ["Format tidak valid."]}}, status=400)
+    form = ItemForm(payload)
+    if not form.is_valid():
+        return JsonResponse({"errors": dict(form.errors)}, status=400)
+    obj = form.save()
+    return JsonResponse({"item": {"id": obj.id, "title": obj.title}}, status=201)
+```
+urls.py: path("items/data/", items_json, name="items_json"), path("items/add/", add_item_ajax, name="add_item_ajax"),
+
+10.9 Hapus data lewat fetch (DELETE)
+```
+// JS
+const response = await fetch(`/reports/${id}/delete/`, { method: "POST", headers: { "X-CSRFToken": csrfToken } });
+// views.py
+@require_POST
+def delete_report_ajax(request, report_id):
+    get_object_or_404(Report, pk=report_id).delete()
+    return JsonResponse({"ok": True})
+// urls.py
+path("reports/<int:report_id>/delete/", delete_report_ajax, name="delete_report_ajax"),
+```
+
+10.10 Filter JS tambahan (lokasi)
+```
+const matchLocation = report.location.toLowerCase().includes(locationInput.value.trim().toLowerCase());
+return matchTitle && matchStatus && matchLocation;
+```
+
+10.11 Urutkan di JS
+```
+return [...reports].sort((a, b) => b.id - a.id);        // id besar dulu
+```
+
+10.12 Pesan error per field dari server (bonus soal 4)
+```
+const data = await response.json();
+const details = Object.entries(data.errors || {}).map(([field, msgs]) => field === "__all__" ? msgs.join(" ") : `${field}: ${msgs.join(" ")}`);
+message = details.join(" ");
+```
+
+10.13 Tampilkan pesan flash Django [TAMBAHAN]
+```
+from django.contrib import messages
+messages.success(request, "Berhasil disimpan")
+{% for m in messages %}<p>{{ m }}</p>{% endfor %}
+```
+
+10.14 Bukti soal 4 (URL diketik langsung)
+Logout, lalu buka http://127.0.0.1:8000/ . Hasil: pindah ke /login/?next=/ . Tangkapan layar atau salin URL itu sebagai bukti.
+
+10.15 Tes manual role soal 2
+| Akun | create | edit | delete | star |
+|------|--------|------|--------|------|
+| tidak login | redirect login | redirect login | redirect login | redirect login |
+| regular | 403 | 403 | 403 | boleh |
+| editor | 403 | boleh | 403 | boleh |
+| owner | boleh | boleh | boleh | boleh |
+Delete/star lewat GET (ketik URL) -> 405.
+
+
+========================================================================
+11. TABEL ERROR
+========================================================================
+
+| Pesan | Penyebab | Perbaikan |
+|-------|----------|-----------|
+| ModuleNotFoundError: No module named 'django' | venv tidak aktif / belum install | .\env\Scripts\Activate.ps1 lalu pip install |
+| ModuleNotFoundError: No module named 'dotenv' | python-dotenv belum dipasang | pip install python-dotenv |
+| can't open file manage.py | salah folder | cd ke folder yang ada manage.py |
+| no such table | belum migrate | python manage.py migrate |
+| NoReverseMatch: Reverse for 'xxx' not found | name di {% url %}/redirect tidak ada di urls.py, atau jumlah argumen salah | samakan nama; edit/delete/star perlu project.id |
+| NoReverseMatch: 'main' is not a registered namespace | app_name hilang | app_name = "main" |
+| TemplateDoesNotExist | nama template di render() salah | samakan persis, mis. main/project_form.html |
+| TypeError: view() got an unexpected keyword argument 'project_id' | nama parameter view != nama di path | samakan |
+| TypeError: view() missing 1 required positional argument | lupa parameter di def | def edit_project(request, project_id) |
+| NameError: name 'xxx' is not defined | lupa import / typo | tambah import |
+| ImportError: cannot import name 'xxx' from main.views | fungsi belum ada / typo di urls.py | cek nama def |
+| The view ... didn't return an HttpResponse | lupa return (misal redirect tanpa return) | tambah return |
+| ValueError: ... didn't return an HttpResponse object. It returned None | ada jalur if tanpa return | pastikan semua jalur return |
+| 403 CSRF verification failed | form POST tanpa {% csrf_token %} / JS tanpa X-CSRFToken | tambah |
+| 405 Method Not Allowed | GET ke view POST-only | normal untuk logout/delete/star lewat URL; pakai form POST |
+| 403 Forbidden (soal 2) | akun tanpa role | benar kalau tak berhak; seed user + group |
+| Unexpected keyword 'instance' / hasil edit membuat data baru | lupa instance=project | ProjectForm(request.POST, instance=project) |
+| Login selalu gagal | AuthenticationForm tanpa request | AuthenticationForm(request, data=request.POST) |
+| Cookie tidak muncul | set_cookie pada response yang tidak di-return | buat response dulu, return response |
+| Modal tidak pernah menutup (JS 4) | closeModal memeriksa isSubmitting | isSubmitting = false sebelum closeModal() |
+| Handler langsung jalan saat halaman dibuka | pakai openModal() | openModal tanpa kurung |
+| Perubahan JS tidak terlihat | cache | Ctrl+F5, cek Console (F12) |
+| Uncaught TypeError: Cannot read properties of null | id elemen salah / script jalan sebelum HTML | cek getElementById sama dengan id di HTML; script pakai defer |
+| Favicon/Google Fonts error | jaringan lab | hapus baris <link> eksternal itu |
+
+
+========================================================================
+12. CHECKLIST
+========================================================================
+
+SEBELUM MENULIS KODE
+[ ] baca soal habis, catat BATAS SCOPE (file apa saja yang boleh diubah)
+[ ] cd ke folder ber-manage.py, venv aktif, django + python-dotenv terpasang
+[ ] python manage.py check, migrate, runserver tanpa error
+[ ] baca urls.py: catat name dan parameter tiap route
+[ ] grep TODO di views/template/JS yang boleh diubah
+
+DJANGO
+[ ] nama fungsi di views.py = nama yang di-import di urls.py
+[ ] parameter view = nama di <int:...>
+[ ] request.method == "POST" (dengan kutip)
+[ ] logout/delete/star: @require_POST atau cek method (405)
+[ ] role dicek di view; 403 dengan PermissionDenied; objek tak ada 404
+[ ] edit: instance=project, redirect setelah save
+[ ] cookie: response dibuat dulu, set_cookie, return response
+[ ] reset: pop key, bukan flush; delete_cookie
+[ ] template: csrf_token di tiap form POST; is_owner/is_editor dari konteks
+[ ] soal 4: @login_required + "Halo, {{ user.username }}!" + bukti redirect /login/?next=/
+
+JAVASCRIPT
+[ ] getElementById sama dengan id di HTML
+[ ] textContent untuk data user
+[ ] listener tanpa kurung; submit bukan click; preventDefault
+[ ] fetch: cek response.ok sebelum .json(); try/catch/finally
+[ ] guard isLoading/isSubmitting; tombol disabled lalu dikembalikan di finally
+[ ] isSubmitting = false sebelum closeModal()
+[ ] setelah data berubah: renderReports(applyFilters())
+[ ] init(): semua listener + loadReports() sekali di akhir
+
+TERAKHIR
+[ ] uji tiap fungsi di browser (bukan di akhir saja)
+[ ] uji tidak login, user biasa, Editor, Owner (soal 2)
+[ ] cek cookie di F12 > Application (last_login, announcement_dismissed, sessionid)
+[ ] tidak mengubah file di luar scope
