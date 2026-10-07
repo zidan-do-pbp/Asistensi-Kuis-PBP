@@ -1,6 +1,6 @@
 // ALUR JS: semua kerja di static/js/itemfinder.js. Soal 1 -> 2 -> 3 -> 4, tiap soal berhenti di init() untuk memasang listener-nya
 // Urutan umum: (1) tulis fungsi, (2) pasang listener di init(), (3) uji di browser
-// Variabel tambahan di bawah ini hanya pengambilan elemen DOM, bukan bagian dari batas scope soal
+// Elemen tambahan (app, open-modal, submit-button, result-count, empty-message) diambil LOKAL di dalam fungsi, supaya tidak menambah konstanta global di luar scope
 
 const list = document.getElementById("report-list");
 const searchInput = document.getElementById("search-input");
@@ -13,24 +13,21 @@ const refreshButton = document.getElementById("refresh-button");
 const closeButton = document.getElementById("close-modal");
 const BASE_REPORTS_ENDPOINT = window.REPORTS_URL;
 
-const app = document.getElementById("app");
-const openButton = document.getElementById("open-modal");
-const submitButton = document.getElementById("submit-button");
-const resultCount = document.getElementById("result-count");
-const emptyMessage = document.getElementById("empty-message");
-
 let reports = JSON.parse(
   document.getElementById("initial-reports").textContent
 );
 
-// isLoading dipakai soal 3, isSubmitting dipakai soal 2 (closeModal) dan soal 4
 let isLoading = false;
+// CATATAN: isSubmitting dipakai closeModal (soal 2) dan submitReport (soal 4). Tambahkan baris ini hanya jika template kuis belum punya
 let isSubmitting = false;
 
 
 // SOAL 1
 //TODO: (urutan 1) renderReports(data). Ubah HANYA fungsi ini, belum perlu fetch
 function renderReports(data) {
+  const resultCount = document.getElementById("result-count");
+  const emptyMessage = document.getElementById("empty-message");
+
   //TODO: (urutan 1a) kosongkan #report-list sebelum render agar kartu tidak dobel
   list.innerHTML = "";
 
@@ -105,6 +102,9 @@ function closeModal() {
 // SOAL 3
 //TODO: (urutan 3) loadReports() lalu listener tombol Muat ulang + pemanggilan pertama di init()
 async function loadReports() {
+  const app = document.getElementById("app");
+  const openButton = document.getElementById("open-modal");
+
   //TODO: (urutan 3a) cegah request baru jika loading atau submit sedang berjalan
   if (isLoading || isSubmitting) {
     return;
@@ -151,6 +151,9 @@ async function loadReports() {
 // SOAL 4
 //TODO: (urutan 4) submitReport(event) lalu listener submit di init(). Jangan ubah fungsi soal 1 sampai 3
 async function submitReport(event) {
+  const app = document.getElementById("app");
+  const submitButton = document.getElementById("submit-button");
+
   //TODO: (urutan 4a) cegah submit default agar halaman tidak reload
   event.preventDefault();
 
@@ -225,6 +228,8 @@ async function submitReport(event) {
 // EVENT HANDLER
 //TODO: (urutan 5) init(): tempat semua listener dikumpulkan. Isi bertahap sesuai urutan soal
 function init() {
+  const openButton = document.getElementById("open-modal");
+
   //TODO: (urutan 2d, soal 2) listener pencarian (input), filter status (change), tombol buka dan tutup modal
   searchInput.addEventListener("input", () => renderReports(applyFilters()));
   statusFilter.addEventListener("change", () => renderReports(applyFilters()));
